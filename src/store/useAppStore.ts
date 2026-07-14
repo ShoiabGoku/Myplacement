@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type {
@@ -142,7 +143,19 @@ export const useAppStore = create<AppState>()(
   )
 );
 
-/** Gate client-only UI on store hydration to avoid SSR/localStorage mismatch. */
+/**
+ * Gate client-only UI on store hydration to avoid SSR/localStorage mismatch.
+ * The mount effect is a safety net: if persist rehydration never fires (e.g.
+ * localStorage blocked in private browsing), the UI must still unblock —
+ * with empty state — instead of showing "Loading…" forever. Running it after
+ * mount is safe: the first render already matched the server HTML.
+ */
 export function useHydrated(): boolean {
-  return useAppStore((s) => s.hydrated);
+  const hydrated = useAppStore((s) => s.hydrated);
+  useEffect(() => {
+    if (!useAppStore.getState().hydrated) {
+      useAppStore.getState().setHydrated();
+    }
+  }, []);
+  return hydrated;
 }
