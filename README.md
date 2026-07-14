@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Myplacement 🚀
 
-## Getting Started
+A personalized **placement preparation platform** built for an IIT Bombay M.Tech Aerospace profile — covering **core aerospace** (GATE / ISRO / DRDO / HAL / Airbus / Boeing), **coding interviews**, **aptitude screening** and **interview prep** in one premium, gamified dashboard.
 
-First, run the development server:
+**Live:** https://shoiabgoku.github.io/Myplacement/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Dashboard** — daily goal, streak counter, XP & levels, activity heatmap, readiness score, weak topics, recent mistakes, recommended practice, study timer, quote of the day, quick-resume.
+- **Four modules** — Core Aerospace, Coding, Aptitude, Interview Prep. Each with a curated test series plus a *Quick Practice* generator (random paper by topic & size).
+- **Full test engine** — countdown with auto-submit, question palette, mark-for-review, MCQ / multi-select / NAT answers, negative marking, per-question time tracking, resume mid-attempt.
+- **Rich results** — score, accuracy, time analysis, topic-wise breakdown, weak/strong areas, and step-by-step solutions with concept, formula, alternative method, common mistakes and memory tricks for **every** question.
+- **Analytics** — score & accuracy trends, daily volume, speed improvement, topic mastery, module-wise progress, overall readiness (based on completed practice).
+- **Revision** — searchable formula handbook (8 sections) + flashcard mode.
+- **Search** — filter ~100 built-in questions by keyword, formula, topic, difficulty, company or id; bookmark favourites.
+- **Admin panel** — add/edit/delete custom questions, JSON import/export, AI question-generation prompt workflow, profile settings.
+- **Gamification** — XP per correct answer, quadratic level curve with titles (Cadet → Legend), 10 achievements, streaks.
+- Dark/light theme, glassmorphism, Framer Motion animations, fully responsive.
+
+## Tech stack
+
+Next.js (App Router, static export) · TypeScript · Tailwind CSS v4 · Zustand (persisted to localStorage) · Framer Motion · Recharts · Lucide icons.
+
+All state lives in the browser (`localStorage`) — no backend needed, works free on GitHub Pages. The typed data layer (`src/data`) is designed so a Prisma + PostgreSQL backend can replace it later without touching the UI.
+
+## Project structure
+
+```
+src/
+  app/            # routes: dashboard, modules, test/[id], results, analytics,
+                  # revision, search, admin
+  components/     # ui primitives, shell (sidebar/topbar), dashboard widgets,
+                  # test runner, module page
+  data/           # question banks (aerospace/coding/aptitude/interview),
+                  # tests, formulas, quotes, achievements, interview Q&A
+  lib/            # types, test engine (scoring/analytics), gamification,
+                  # streaks, utils
+  store/          # zustand store (progress, attempts, custom questions)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Adding questions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **In code:** append to `src/data/questions/<module>.ts` (typed, validated by TS) and optionally reference the ids in a new test in `src/data/tests.ts`.
+2. **In the app:** Admin → *Add question*, or import a JSON array (schema shown in the Admin panel's AI prompt). Custom questions join Quick Practice and Search automatically.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
+```bash
+npm install
+npm run dev    # http://localhost:3000
+npm run build  # static export to out/
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployment is automatic: pushing to `main` triggers the GitHub Actions workflow that builds and publishes to GitHub Pages.
