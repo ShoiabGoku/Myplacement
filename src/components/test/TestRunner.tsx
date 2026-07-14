@@ -50,24 +50,35 @@ export function TestRunner({ testId }: { testId: string }) {
   const running = useAppStore((s) => s.running);
   const customQuestions = useAppStore((s) => s.customQuestions);
 
-  // Resolve the test definition: static tests from data, "practice" from the store.
+  // Resolve the test definition: static tests from data, "practice" from the
+  // store. The practice config is read once via getState() rather than the
+  // reactive `running` value: this component writes `running` on every answer,
+  // and rebuilding `test` (a fresh object) on each write would recreate
+  // persistRunning and re-trigger the persistence effect in an infinite loop
+  // that freezes the tab.
   const test: TestDef | null = useMemo(() => {
     const def = testById(testId);
     if (def) return def;
-    if (testId === "practice" && running?.testId === "practice") {
-      return {
-        id: "practice",
-        module: running.module,
-        title: running.title,
-        description: "Ad-hoc practice session generated from your filters.",
-        difficulty: "mixed",
-        durationMin: running.durationMin,
-        questionIds: running.questionIds,
-        topics: [],
-      };
+    if (testId === "practice") {
+      const r = useAppStore.getState().running;
+      if (r && r.testId === "practice") {
+        return {
+          id: "practice",
+          module: r.module,
+          title: r.title,
+          description: "Ad-hoc practice session generated from your filters.",
+          difficulty: "mixed",
+          durationMin: r.durationMin,
+          questionIds: r.questionIds,
+          topics: [],
+        };
+      }
     }
     return null;
-  }, [testId, running]);
+    // `hydrated` stands in for store readiness; `running` is intentionally
+    // not a dependency (see comment above).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testId, hydrated]);
 
   const questions: Question[] = useMemo(
     () => (test ? getQuestionsByIds(test.questionIds, customQuestions) : []),
