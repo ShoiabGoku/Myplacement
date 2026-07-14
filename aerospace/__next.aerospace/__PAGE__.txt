@@ -1,6 +1,0 @@
-1:"$Sreact.fragment"
-2:I[36497,["/Myplacement/_next/static/chunks/3g3vgc-j8r7o_.js","/Myplacement/_next/static/chunks/1-8s9_t85wwr4.js","/Myplacement/_next/static/chunks/3d-_00poy6zjx.js","/Myplacement/_next/static/chunks/11oy4psrtxgxt.js","/Myplacement/_next/static/chunks/2sc9pucoonj67.js","/Myplacement/_next/static/chunks/3tlm1lnzc_kn-.js"],"ModulePage"]
-3:I[97367,["/Myplacement/_next/static/chunks/3g3vgc-j8r7o_.js","/Myplacement/_next/static/chunks/1-8s9_t85wwr4.js","/Myplacement/_next/static/chunks/3d-_00poy6zjx.js"],"OutletBoundary"]
-4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"module":"aerospace","tagline":"GATE, ISRO, DRDO, HAL, Airbus, Boeing — fluid mechanics to flight control, at every difficulty."}],[["$","script","script-0",{"src":"/Myplacement/_next/static/chunks/11oy4psrtxgxt.js","async":true}],["$","script","script-1",{"src":"/Myplacement/_next/static/chunks/2sc9pucoonj67.js","async":true}],["$","script","script-2",{"src":"/Myplacement/_next/static/chunks/3tlm1lnzc_kn-.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"L09FxPFXFVtbziaU1lBO3"}
-5:null
