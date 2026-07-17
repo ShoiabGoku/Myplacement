@@ -79,6 +79,46 @@ export const TESTS: TestDef[] = [
     companies: ["ISRO", "DRDO"],
   },
 
+  {
+    id: "aero-gate-mock-2",
+    module: "aerospace",
+    title: "GATE Aerospace Mock 2",
+    description: "A second full-syllabus GATE mock — space mechanics, duct flows, vibrations, electrical and signals included.",
+    difficulty: "gate",
+    durationMin: 30,
+    questionIds: [
+      "aero-035", "aero-037", "aero-038", "aero-039", "aero-040", "aero-043",
+      "aero-044", "aero-045", "aero-003", "aero-014", "aero-028", "aero-006",
+    ],
+    topics: ["Space Mechanics", "Gas Dynamics", "Aerodynamics", "Propulsion", "Heat Transfer", "Engineering Mechanics", "Basic Electrical", "Signals"],
+    companies: ["ISRO", "DRDO", "HAL"],
+  },
+  {
+    id: "aero-space-mechanics",
+    module: "aerospace",
+    title: "Space Mechanics & Launch Vehicles",
+    description: "Orbits, escape velocity, Kepler's laws, the rocket equation and ISRO launcher tech.",
+    difficulty: "mixed",
+    durationMin: 15,
+    questionIds: ["aero-012", "aero-013", "aero-034", "aero-035", "aero-036", "aero-037"],
+    topics: ["Space Mechanics", "Propulsion"],
+    companies: ["ISRO"],
+  },
+  {
+    id: "aero-hal-airbus",
+    module: "aerospace",
+    title: "HAL / Airbus Interview Mock",
+    description: "Conceptual questions interviewers actually ask — materials, manufacturing, V-n limits, controls and aero intuition.",
+    difficulty: "interview",
+    durationMin: 25,
+    questionIds: [
+      "aero-024", "aero-046", "aero-047", "aero-006", "aero-008",
+      "aero-018", "aero-027", "aero-041", "aero-042", "aero-014",
+    ],
+    topics: ["Aircraft Structures", "Manufacturing", "Flight Mechanics", "Aerodynamics", "Heat Transfer", "Gas Dynamics", "Propulsion"],
+    companies: ["HAL", "Airbus", "Boeing"],
+  },
+
   // ---------- Coding ----------
   {
     id: "cod-dsa-fundamentals",
@@ -132,6 +172,35 @@ export const TESTS: TestDef[] = [
     questionIds: ["cod-009", "cod-017", "cod-018", "cod-019", "cod-020", "cod-021", "cod-022"],
     topics: ["Python", "C++", "Java", "SQL", "Bit Manipulation"],
     companies: ["Goldman Sachs", "NVIDIA", "Uber"],
+  },
+
+  {
+    id: "cod-ds-deep-dive",
+    module: "coding",
+    title: "Data Structures Deep Dive",
+    description: "Linked lists, queues, backtracking, greedy pitfalls and sliding windows.",
+    difficulty: "medium",
+    durationMin: 20,
+    questionIds: [
+      "cod-027", "cod-028", "cod-029", "cod-030",
+      "cod-031", "cod-032", "cod-008", "cod-015",
+    ],
+    topics: ["Linked Lists", "Queue", "Backtracking", "Greedy", "Strings", "Arrays", "Bit Manipulation", "Sliding Window"],
+    companies: ["Amazon", "Microsoft", "Adobe"],
+  },
+  {
+    id: "cod-screening-mock",
+    module: "coding",
+    title: "Coding Screening Mock",
+    description: "A 12-question cross-section mirroring an online screening round — DSA, languages and SQL.",
+    difficulty: "mixed",
+    durationMin: 30,
+    questionIds: [
+      "cod-001", "cod-002", "cod-004", "cod-010", "cod-012", "cod-017",
+      "cod-021", "cod-024", "cod-027", "cod-029", "cod-030", "cod-031",
+    ],
+    topics: ["Searching", "Sorting", "Dynamic Programming", "Graphs", "Python", "SQL", "Binary Search", "Linked Lists", "Backtracking", "Greedy", "Strings"],
+    companies: ["Google", "Amazon", "Microsoft", "Goldman Sachs"],
   },
 
   // ---------- Aptitude ----------
@@ -188,6 +257,35 @@ export const TESTS: TestDef[] = [
     ],
     topics: ["Quantitative Aptitude", "Logical Reasoning", "Verbal Ability", "Data Interpretation"],
     companies: ["Amazon", "Goldman Sachs", "McKinsey"],
+  },
+
+  {
+    id: "apt-arith-sprint-2",
+    module: "aptitude",
+    title: "Arithmetic Sprint 2",
+    description: "Mixtures, pipes, interest, calendars and fast DI arithmetic.",
+    difficulty: "mixed",
+    durationMin: 15,
+    questionIds: [
+      "apt-027", "apt-028", "apt-029", "apt-030",
+      "apt-031", "apt-002", "apt-004", "apt-026",
+    ],
+    topics: ["Quantitative Aptitude", "Logical Reasoning", "Data Interpretation"],
+    companies: ["TCS-style", "Goldman Sachs"],
+  },
+  {
+    id: "apt-full-mock-2",
+    module: "aptitude",
+    title: "Full Aptitude Mock 2",
+    description: "A second complete screening paper with fresh quant, reasoning and verbal questions.",
+    difficulty: "mixed",
+    durationMin: 25,
+    questionIds: [
+      "apt-002", "apt-006", "apt-009", "apt-012", "apt-017", "apt-022",
+      "apt-026", "apt-027", "apt-028", "apt-029", "apt-030", "apt-032",
+    ],
+    topics: ["Quantitative Aptitude", "Logical Reasoning", "Verbal Ability", "Data Interpretation"],
+    companies: ["Amazon", "McKinsey", "BCG"],
   },
 
   // ---------- Interview ----------
