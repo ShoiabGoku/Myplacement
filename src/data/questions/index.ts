@@ -1,5 +1,6 @@
 import type { ModuleId, Question } from "@/lib/types";
 import { AEROSPACE_QUESTIONS } from "./aerospace";
+import { MECHANICS_QUESTIONS } from "./mechanics";
 import { CODING_QUESTIONS } from "./coding";
 import { APTITUDE_QUESTIONS } from "./aptitude";
 import { INTERVIEW_QUESTIONS } from "./interview";
@@ -7,6 +8,7 @@ import { INTERVIEW_QUESTIONS } from "./interview";
 /** All built-in questions across modules. */
 export const ALL_QUESTIONS: Question[] = [
   ...AEROSPACE_QUESTIONS,
+  ...MECHANICS_QUESTIONS,
   ...CODING_QUESTIONS,
   ...APTITUDE_QUESTIONS,
   ...INTERVIEW_QUESTIONS,
