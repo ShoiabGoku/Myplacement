@@ -6,6 +6,8 @@ import { NON_CORE_QUESTIONS } from "./nonCore";
 import { CODING_QUESTIONS } from "./coding";
 import { APTITUDE_QUESTIONS } from "./aptitude";
 import { INTERVIEW_QUESTIONS } from "./interview";
+import { QUANT_HFT_QUESTIONS } from "./quantHft";
+import { LAT_AEROSPACE_QUESTIONS } from "./latAero";
 
 /** All built-in questions across modules. */
 export const ALL_QUESTIONS: Question[] = [
@@ -16,6 +18,8 @@ export const ALL_QUESTIONS: Question[] = [
   ...CODING_QUESTIONS,
   ...APTITUDE_QUESTIONS,
   ...INTERVIEW_QUESTIONS,
+  ...QUANT_HFT_QUESTIONS,
+  ...LAT_AEROSPACE_QUESTIONS,
 ];
 
 /**
