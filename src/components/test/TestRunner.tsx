@@ -19,6 +19,7 @@ import type { AttemptAnswer, Question, RunningTest, TestDef } from "@/lib/types"
 import { getQuestionsByIds, MODULE_LABELS } from "@/data/questions";
 import { testById } from "@/data/tests";
 import { scoreAttempt } from "@/lib/engine";
+import { newOptionSeed, optionOrder } from "@/lib/optionOrder";
 import { newlyUnlocked } from "@/data/achievements";
 import { currentStreak } from "@/lib/streak";
 import { useAppStore, useHydrated } from "@/store/useAppStore";
@@ -93,6 +94,9 @@ export function TestRunner({ testId }: { testId: string }) {
   const [remaining, setRemaining] = useState(0);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  // Option shuffle for this attempt; undefined = source order (a resumed test
+  // saved before shuffling existed).
+  const [optionSeed, setOptionSeed] = useState<number | undefined>(undefined);
   const startedAtRef = useRef(0);
   const lastTickRef = useRef(0);
   const remainingRef = useRef(0);
@@ -127,10 +131,11 @@ export function TestRunner({ testId }: { testId: string }) {
         remainingSec,
         currentIndex: index,
         answers: ans,
+        optionSeed,
       };
       useAppStore.getState().saveRunning(rt);
     },
-    [test]
+    [test, optionSeed]
   );
 
   const start = (resume: boolean) => {
@@ -139,12 +144,14 @@ export function TestRunner({ testId }: { testId: string }) {
       startedAtRef.current = running.startedAt;
       setAnswers(running.answers);
       setCurrent(running.currentIndex);
+      setOptionSeed(running.optionSeed);
       remainingRef.current = Math.max(30, running.remainingSec);
       setRemaining(remainingRef.current);
     } else {
       startedAtRef.current = Date.now();
       setAnswers({});
       setCurrent(0);
+      setOptionSeed(newOptionSeed());
       remainingRef.current = test.durationMin * 60;
       setRemaining(remainingRef.current);
     }
@@ -165,6 +172,7 @@ export function TestRunner({ testId }: { testId: string }) {
       startedAt: startedAtRef.current,
       allottedSec: test.durationMin * 60,
       timeTakenSec: test.durationMin * 60 - remainingRef.current,
+      optionSeed,
     });
     const store = useAppStore.getState();
     store.submitAttempt(attempt);
@@ -176,7 +184,7 @@ export function TestRunner({ testId }: { testId: string }) {
     );
     for (const a of fresh) post.unlockAchievement(a.id, a.xp);
     router.replace(`/results/?attempt=${attempt.id}`);
-  }, [test, questions, answers, current, bankTime, router]);
+  }, [test, questions, answers, current, bankTime, router, optionSeed]);
 
   // Countdown + auto-submit.
   useEffect(() => {
@@ -397,7 +405,10 @@ export function TestRunner({ testId }: { testId: string }) {
                 }
               />
             ) : (
-              q.options?.map((opt, i) => {
+              // `pos` is the displayed slot (its letter); `i` is the original
+              // option index, which is what gets recorded and scored.
+              optionOrder(q, optionSeed).map((i, pos) => {
+                const opt = q.options![i];
                 const selected = a?.selected?.includes(i) ?? false;
                 return (
                   <button
@@ -426,7 +437,7 @@ export function TestRunner({ testId }: { testId: string }) {
                         selected ? "border-primary bg-primary text-white" : "border-muted"
                       )}
                     >
-                      {String.fromCharCode(65 + i)}
+                      {String.fromCharCode(65 + pos)}
                     </span>
                     {opt}
                   </button>

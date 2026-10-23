@@ -9,7 +9,10 @@ import { pct, uid } from "./utils";
 
 export type Verdict = "correct" | "incorrect" | "unattempted";
 
-/** Grade a single question against the recorded answer. */
+/**
+ * Grade a single question against the recorded answer. `selected` holds
+ * original option indices, so the display shuffle never affects grading.
+ */
 export function evaluate(q: Question, ans: AttemptAnswer | undefined): Verdict {
   if (!ans) return "unattempted";
   if (q.type === "nat") {
@@ -37,6 +40,8 @@ export interface ScoreInput {
   startedAt: number;
   allottedSec: number;
   timeTakenSec: number;
+  /** Option-shuffle seed used during the attempt, stored for the review. */
+  optionSeed?: number;
 }
 
 /** Score a submitted test and produce a complete Attempt record. */
@@ -96,6 +101,7 @@ export function scoreAttempt(input: ScoreInput): Attempt {
     accuracy: pct(correct, attemptedCount),
     topicStats: [...topicMap.values()],
     xpEarned: xp,
+    optionSeed: input.optionSeed,
   };
 }
 

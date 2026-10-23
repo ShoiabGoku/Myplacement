@@ -13,6 +13,7 @@ import { useAppStore, useHydrated } from "@/store/useAppStore";
 import { buildQuestionMap } from "@/data/questions";
 import { TESTS } from "@/data/tests";
 import { evaluate, type Verdict } from "@/lib/engine";
+import { displayLetter, optionOrder } from "@/lib/optionOrder";
 import type { Question } from "@/lib/types";
 import { cn, fmtClock, pct } from "@/lib/utils";
 
@@ -22,16 +23,21 @@ function verdictIcon(v: Verdict) {
   return <MinusCircle size={18} className="text-muted" />;
 }
 
-function formatUserAnswer(q: Question, sel?: number[], nat?: number | null): string {
-  if (q.type === "nat") return nat === null || nat === undefined ? "—" : String(nat);
-  if (!sel || sel.length === 0) return "—";
-  return sel.map((i) => String.fromCharCode(65 + i)).join(", ");
+/** Letters as the student saw them, for original option indices. */
+function lettersFor(order: number[], indices: number[]): string {
+  return indices.map((i) => displayLetter(order, i)).sort().join(", ");
 }
 
-function formatCorrectAnswer(q: Question): string {
+function formatUserAnswer(q: Question, order: number[], sel?: number[], nat?: number | null): string {
+  if (q.type === "nat") return nat === null || nat === undefined ? "—" : String(nat);
+  if (!sel || sel.length === 0) return "—";
+  return lettersFor(order, sel);
+}
+
+function formatCorrectAnswer(q: Question, order: number[]): string {
   if (q.type === "nat")
     return `${q.answer?.value}${q.answer?.tolerance ? ` (±${q.answer.tolerance})` : ""}`;
-  return (q.correct ?? []).map((i) => String.fromCharCode(65 + i)).join(", ");
+  return lettersFor(order, q.correct ?? []);
 }
 
 function ResultsContent() {
@@ -184,6 +190,8 @@ function ResultsContent() {
           const ans = attempt.answers[qid];
           const verdict = evaluate(q, ans);
           const open = openQ === qid;
+          // Same order the student saw during the attempt.
+          const order = optionOrder(q, attempt.optionSeed);
           return (
             <Card key={qid} className="p-0">
               <button
@@ -199,10 +207,10 @@ function ResultsContent() {
                     <Badge tone="accent">{q.topic}</Badge>
                     <DifficultyBadge level={q.difficulty} />
                     <span>
-                      Your answer: <b>{formatUserAnswer(q, ans?.selected, ans?.natValue)}</b>
+                      Your answer: <b>{formatUserAnswer(q, order, ans?.selected, ans?.natValue)}</b>
                     </span>
                     <span>
-                      Correct: <b className="text-success">{formatCorrectAnswer(q)}</b>
+                      Correct: <b className="text-success">{formatCorrectAnswer(q, order)}</b>
                     </span>
                     {ans && <span>{Math.round(ans.timeSec)}s spent</span>}
                   </div>
@@ -216,7 +224,8 @@ function ResultsContent() {
                 <div className="px-4 pb-4">
                   {q.options && (
                     <div className="flex flex-col gap-1.5">
-                      {q.options.map((opt, i) => {
+                      {order.map((i, pos) => {
+                        const opt = q.options![i];
                         const isCorrect = q.correct?.includes(i);
                         const wasSelected = ans?.selected?.includes(i);
                         return (
@@ -231,7 +240,7 @@ function ResultsContent() {
                                 : "border-card-border"
                             )}
                           >
-                            <b>{String.fromCharCode(65 + i)}.</b> {opt}
+                            <b>{String.fromCharCode(65 + pos)}.</b> {opt}
                             {isCorrect && " ✓"}
                             {wasSelected && !isCorrect && " ✗ (your pick)"}
                           </div>
@@ -239,7 +248,7 @@ function ResultsContent() {
                       })}
                     </div>
                   )}
-                  <SolutionPanel question={q} />
+                  <SolutionPanel question={q} order={order} />
                 </div>
               )}
             </Card>

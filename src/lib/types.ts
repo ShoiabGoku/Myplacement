@@ -61,6 +61,7 @@ export type QState = "unseen" | "seen" | "answered" | "marked" | "answered-marke
 
 export interface AttemptAnswer {
   questionId: string;
+  /** ORIGINAL option indices (into `Question.options`), never display positions. */
   selected?: number[];
   natValue?: number | null;
   timeSec: number;
@@ -94,6 +95,13 @@ export interface Attempt {
   accuracy: number;
   topicStats: TopicStat[];
   xpEarned: number;
+  /**
+   * Seed of the option shuffle shown during this attempt (see lib/optionOrder).
+   * Absent on attempts saved before shuffling existed: those were shown in
+   * source order and review that way. `answers[].selected` always holds
+   * original option indices.
+   */
+  optionSeed?: number;
 }
 
 /** Saved state of a test in progress, enabling Quick Resume. */
@@ -108,6 +116,8 @@ export interface RunningTest {
   remainingSec: number;
   currentIndex: number;
   answers: Record<string, AttemptAnswer>;
+  /** Option-shuffle seed, kept so a resumed test shows the same order. */
+  optionSeed?: number;
 }
 
 /** Per-day activity used for streaks, heatmap and daily goals. */
