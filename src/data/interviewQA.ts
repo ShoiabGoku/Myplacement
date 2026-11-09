@@ -279,4 +279,110 @@ export const INTERVIEW_QA: InterviewQA[] = [
       "Assume m ≈ 70 t (W ≈ 690 kN), two engines ≈ 2 × 120 kN static, about 200 kN averaged over the roll. V_LOF ≈ 1.2 × V_S with takeoff CLmax ≈ 2.2, S = 122.6 m²: V_S = √(2W/(ρS·CLmax)) = √(1.38×10⁶/(1.225×122.6×2.2)) ≈ 64 m/s → V_LOF ≈ 77 m/s. Mean acceleration ≈ (T − D − μ(W − L))/m ≈ 2.5 m/s². s ≈ V²/(2a) ≈ 77²/5 ≈ 1200 m. Real A320 field lengths of 1.8–2.1 km include the air segment to 35 ft and the certification factors (OEI, 115% AEO), so the estimate is plausible.",
     tips: "Interviewers grade the structure and sanity checks, not the exact number.",
   },
+
+  // ---------- Tesla — Supplier Industrialization Engineer (Mechanical) ----------
+  {
+    id: "qa-035",
+    category: "hr",
+    question: "Tesla SIE — You're an aerospace M.Tech. Why a supplier industrialization role at Tesla?",
+    answer:
+      "Template — tie three JD lines to three real proofs, then say what you want to learn: \"The role takes parts from tool design to stable mass production at suppliers. My B.Tech project was a manufacturing problem — I made banana–glass composite laminates by compression molding and studied how stacking sequence changed impact behaviour, so I've lived with process windows, defects and testing. My M.Tech work is simulation-heavy (CFD in Fluent), the same mindset as reading casting, forming and mold-flow simulation. And I've done the measurement side — validating models against experiments. What I want to learn is high-volume manufacturing at Tesla's pace: qualification, root cause and ramp.\" Adapt every detail to what you actually did.",
+    tips: "Never say 'aerospace has no jobs'. Show you read the JD: TPQP, PPAP, capability data, PCRs, ramp targets.",
+  },
+  {
+    id: "qa-036",
+    category: "technical",
+    question: "Tesla SIE — Walk me through qualifying a new high-pressure die-cast part at a supplier.",
+    answer:
+      "1) Sourcing: confirm capability — press tonnage vs projected area × intensification pressure, vacuum, die shop, melt/degassing control, X-ray/CT, heat treat, machining, metrology, capacity, IATF 16949. 2) Design review: DFM feedback on gating, overflows, thermal management, draft, wall uniformity, porosity risk at sealing faces, datum targets and machining allowances; review flow/solidification simulation (MAGMA/Flow-3D). 3) Quality planning (TPQP): define deliverables — DFMEA/PFMEA, process flow, control plan, MSA, dimensional layout, material certs, CT porosity criteria, capability studies. 4) Tool build and trials: track milestones, T1 samples, FAI against the ballooned drawing, corrections (steel-safe). 5) Validation: Ppk on special characteristics (≥ 1.67), run-at-rate, PPAP-style submission review — approve, reject or request revisions. 6) Ramp: OEE, scrap and yield targets, containment until stable, then PCRs for any later change.",
+    tips: "Structure beats detail: sourcing → design review → quality planning → tool trials → validation → ramp.",
+  },
+  {
+    id: "qa-037",
+    category: "technical",
+    question: "Tesla SIE — Porosity starts showing up on a machined sealing face of a cast housing in production. How do you handle it?",
+    answer:
+      "Containment first: quarantine suspect stock at the supplier, in transit and at Tesla; 100% leak test or CT/X-ray sort; mark certified-good parts. Then 8D: describe the problem precisely (which cavity, where on the face, since when, which lots — Is/Is-Not). Check what changed: alloy lot and hydrogen (density index), degassing, die temperature and cooling lines, spray, intensification pressure/timing, vacuum performance, shot-sleeve fill, machining depth into the core. Section and CT failed parts to tell gas porosity (round) from shrinkage (dendritic) — they have different fixes. Verify the root cause by switching it on and off, implement the fix, confirm with capability and leak data, and update PFMEA and control plan (D7). Impregnation is only acceptable as an approved, controlled step.",
+    tips: "Say 'containment' in the first sentence. Panels test whether you protect the customer before investigating.",
+  },
+  {
+    id: "qa-038",
+    category: "technical",
+    question: "Tesla SIE — How do you assess a supplier's capability during sourcing?",
+    answer:
+      "Technical fit: equipment that can physically make the part (press/machine tonnage, bed size, shot size, axes, hot-stamping furnace, molding tonnage and barrel size). Process control: melt or material handling (drying, degassing), thermal control, documented parameters, SPC. Tooling: in-house die/mold shop, maintenance, spare inserts. Quality: IATF 16949, metrology (CMM, scanning, CT), lab testing, MSA practice, past PPAP and field performance. Capacity: free hours after other customers' load, cycle times, cavitation, shifts and realistic OEE against peak demand. Downstream steps: heat treat, machining, coating, impregnation. Finish with a risk summary and what to verify later with a run-at-rate.",
+    tips: "Use one concrete example for your track (e.g. tonnage curve for stamping, clamp force for HPDC, shot size for molding).",
+  },
+  {
+    id: "qa-039",
+    category: "technical",
+    question: "Tesla SIE — Explain Cp and Cpk, and why a Cpk of 1.0 is a problem.",
+    answer:
+      "Cp = (USL − LSL)/6σ compares tolerance width with process spread; Cpk = min(USL − μ, μ − LSL)/3σ also accounts for centring. Cpk 1.0 means the nearest limit sits only 3σ from the mean: about 1350 ppm out on that side even if the process is perfectly stable, and any mean shift (tool wear, new lot) pushes far more out. That's why ongoing Cpk ≥ 1.33 and initial Ppk ≥ 1.67 are typical. If Cp is high but Cpk low, the process is off-centre — re-centre it; if Cp itself is low, reduce variation (or challenge the tolerance with design using data). Capability only means something if the process is stable (control chart) and the gauge is capable (GR&R).",
+    tips: "Mention stability and MSA as preconditions — that is what separates a quality engineer from a formula reciter.",
+  },
+  {
+    id: "qa-040",
+    category: "technical",
+    question: "Tesla SIE — A stamped panel splits in die tryout. How do you troubleshoot?",
+    answer:
+      "Locate and quantify: where is the split, what strain state (circle grid or scan) — is it in plane strain near the FLC minimum? Compare with the AutoForm prediction. Check the material: actual coil properties (n, r, yield, thickness) vs the simulation input, coating type. Check the process: blank position and shape, blank-holder force and its distribution, draw-bead height, lubrication, die radii and surface finish, press parallelism and cushion pressure. Fix by reducing restraint locally (beads, BHF), enlarging radii, improving lubrication, adjusting blank shape — while watching that wrinkles don't appear elsewhere. Confirm with strain measurement against the FLD with a safety margin, then track capability over production lots.",
+    tips: "Show the trade-off: every fix for splits risks wrinkles, so you balance draw-in rather than just 'loosening' the die.",
+  },
+  {
+    id: "qa-041",
+    category: "technical",
+    question: "Tesla SIE — How do you manage springback on an AHSS or aluminium part?",
+    answer:
+      "Springback grows with σ_y/E, so AHSS (high strength) and aluminium (E ≈ ⅓ of steel) are the worst cases. In design: add stiffening features (beads, darts, flanges), avoid long open sections. In process: compensate the die surface from simulation (iterative morphing), apply post-stretch with lock beads so the section is more uniformly plastic, restrike or coin radii, and control material variation (coil yield strength scatter changes springback). Measure parts by 3D scanning against CAD and correlate with simulation; expect several compensation loops. Capability on hole positions and trim edges after springback is what finally matters.",
+    tips: "Quote the σ_y/E idea and the 'aluminium ≈ 3× steel' rule — then show the compensation loop.",
+  },
+  {
+    id: "qa-042",
+    category: "technical",
+    question: "Tesla SIE — An injection-molded part warps out of tolerance. What is your root-cause approach?",
+    answer:
+      "Warpage is differential shrinkage. Check the three usual drivers: uneven cooling (mold temperature difference between halves, blocked or badly placed cooling lines — check with thermal imaging), wall-thickness variation (thick sections shrink more), and orientation (fibre alignment in glass-filled grades; flow length). Then the process: pack pressure and hold time (gate-freeze study), melt and mold temperatures, cooling time, and material drying/moisture. Compare against the mold-flow warp prediction. Fixes in order of cost: process window (DOE), cooling balance, gate location or sequential valve gating, part design (ribs, uniform walls), and finally steel compensation of the cavity. Validate with scanning and capability.",
+    tips: "Use the phrase 'differential shrinkage' early and list cooling, thickness and orientation — interviewers listen for those three.",
+  },
+  {
+    id: "qa-043",
+    category: "technical",
+    question: "Tesla SIE — Explain position tolerance at MMC with a numerical example.",
+    answer:
+      "Hole Ø10.0–10.2, position Ø0.10 at MMC to datums A|B|C. MMC of a hole is its smallest size, Ø10.0. If the hole is made at Ø10.15, it gains a bonus of 0.15, so its axis may be anywhere in a Ø0.25 zone around true position. The virtual condition is MMC − tolerance = Ø9.90: a fixed Ø9.90 gauge pin at true position, located on A|B|C, must enter every good hole. A CMM reports true position as 2√(Δx² + Δy²) — e.g. Δx = 0.06, Δy = 0.08 gives Ø0.20, acceptable for that Ø10.15 hole but not for a hole made at Ø10.05 (allowed Ø0.15).",
+    tips: "Doing the arithmetic out loud is the fastest way to prove you really understand GD&T.",
+  },
+  {
+    id: "qa-044",
+    category: "technical",
+    question: "Tesla SIE — What would you check at a tool buy-off?",
+    answer:
+      "Dimensional: full layout and FAI of parts from the production tool against the drawing, CMM/scan reports, capability (Ppk) on special characteristics. Process: documented, stable parameters within a validated window; parts made at production rate (run-at-rate) with production people, gauges and material. Quality system: PFMEA, control plan, MSA on the gauges used, error-proofing working. Appearance: cosmetic approval against masters for Class A parts. Tool condition: cooling, venting, wear inserts, spares, maintenance plan. Anything open goes on an action list with owners and dates before the tool is released or paid for.",
+    tips: "Buy-off is about the PROCESS being capable, not one good part.",
+  },
+  {
+    id: "qa-045",
+    category: "technical",
+    question: "Tesla SIE — How would you reduce the cycle time of a machined aluminium part at a supplier?",
+    answer:
+      "Measure first: time-study the cycle and split cutting from non-cutting time (tool changes, rapids, probing, air cutting, loading). Typical gains: adaptive/trochoidal roughing at full flute depth with higher feeds; fewer tools (combination or form tools); optimised tool order and rapids; higher speeds with PCD or polished carbide on aluminium; multi-part fixtures, tombstones or pallet changers to remove loading time; 5-axis or 3+2 to remove set-ups. Then verify that quality and tool life hold (Cpk, burrs, finish) and update the control plan — a cycle-time gain that adds scrap isn't a gain.",
+    tips: "Quantify: 'non-cutting time was 35% of the cycle' sounds like someone who has actually done it.",
+  },
+  {
+    id: "qa-046",
+    category: "behavioral",
+    question: "Tesla SIE — Tell me about a time you worked with an external party under deadline pressure.",
+    answer:
+      "Template — use a real episode (an internship, a vendor for a lab setup, a fest sponsor, a fabrication shop for your project): \"[Situation: what had to be delivered, by when, by whom outside your team.] [Task: what you owned.] [Action: how you set clear requirements, tracked progress with dates, went on site or checked samples early, escalated with options when it slipped.] [Result: delivered on time or the recovery you achieved, with a number.] What I'd do the same at a supplier: agree requirements in writing, check the first parts early, and escalate early with options.\"",
+    tips: "Supplier engineers are judged on follow-through. Show you check early and escalate early — never invent details.",
+  },
+  {
+    id: "qa-047",
+    category: "project",
+    question: "Tesla SIE — What from your compression-molding composites project carries over to injection molding or casting?",
+    answer:
+      "Template — adapt to exactly what you did: process parameters (temperature, pressure, time) define a window, and defects (voids, dry spots, delamination, warpage) trace back to them; you measured outcomes (impact behaviour, mechanical tests) and compared configurations (stacking sequence) — that is a small DOE. In injection molding the same logic appears in scientific molding (viscosity curve, gate-freeze study, process window DOE) and in casting as gating/thermal control vs porosity. Be honest that high-volume tooling and PPAP are new to you, and show you know where they fit.",
+    tips: "Interviewers respect honest bridges more than claimed expertise. Expect follow-ups on void formation and cure/cooling.",
+  },
 ];
