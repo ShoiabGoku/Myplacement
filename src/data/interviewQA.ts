@@ -537,4 +537,156 @@ export const INTERVIEW_QA: InterviewQA[] = [
       "Ask about the work and how to succeed: 'How are rotations matched to EEDPs, and how much say do we have?', 'What distinguishes EEDPs who go on to strong technical careers here?', 'What are the hardest technical problems the JFWTC teams in [area] are working on right now?', 'How does FLIGHT DECK show up in an engineer's day-to-day work?' Avoid questions answered in the JD or pre-placement talk (bond, salary structure) and anything that signals leaving.",
     tips: "One or two thoughtful questions are enough; tie one to something the panel said.",
   },
+  {
+    id: "qa-067",
+    category: "technical",
+    question: "LAT — Explain how a blown wing reaches lift coefficients of 5–7.",
+    answer:
+      "Three mechanisms add up. (1) Dynamic-pressure augmentation: propulsors accelerate the flow over the wing, so the blown span works at q_local several times q∞ (actuator disk: V_w² = V∞² + 2T/ρA). (2) Supercirculation: turning the high-momentum jet over a deflected flap or Coandă surface moves the rear stagnation point and adds circulation beyond what the unblown section could hold. (3) Jet reaction: the vertical component of the deflected jet momentum, Cμ sin(α + δⱼ). Normalised by free-stream q, CL becomes 5–7+ (YC-15/C-17 ≈ 7; LAT's demonstrator reportedly > 5). Costs: high induced drag, large nose-down pitching moment that changes with thrust, powered-lift failure modes (motor-out = lift-out), and noise/power demands.",
+    tips: "Write L = qSC_L, Cμ = T/(q∞S) and the reaction term on the board; then talk trade-offs. LAT's own brief asks you to identify the aerodynamic-centre shift — have that ready.",
+  },
+  {
+    id: "qa-068",
+    category: "technical",
+    question: "LAT — How would you approach LAT's Inter IIT problem: a powered-lift wing reaching CL 6.5 with T/W between 0.5 and 0.65?",
+    answer:
+      "1) Requirements to numbers: 15 kg at 20 m/s and CL 6.5 → S ≈ 0.092 m²; cruise at 80 m/s → CL ≈ 0.41, so the clean wing must also be efficient (L/D > 20). 2) Budget the lift: with T = 0.6W, Cμ ≈ 3.9; a jet turned 60° gives ≈ 3.4 of CL by reaction alone, so the rest comes from circulation and supercirculation. 3) Trade concepts quickly with low-fidelity models: propeller vs open rotor vs EDF (momentum theory/BEMT), USB vs blown slotted flap, aspect ratio and flap deflection (VLM with slipstream, Spence-type jet-flap estimates). 4) Refine the best two with RANS (actuator disk or MRF) and a mesh-convergence/GCI study; validate key points in a tunnel matching Cμ. 5) Check the pitching moment and aerodynamic centre with thrust, the structural loads and weight, and what a controller needs (thrust–pitch coupling). 6) Iterate, and report model-vs-CFD-vs-test agreement.",
+    tips: "This is the clearest public signal of what LAT values: math models that agree with CFD and tunnel data, honest error bars, and systems thinking (AC shift, structure, controls).",
+  },
+  {
+    id: "qa-069",
+    category: "technical",
+    question: "LAT — How would you build a fast low-fidelity model of a distributed-propulsion blown wing?",
+    answer:
+      "Start with the propulsors: momentum theory or BEMT gives thrust and the induced axial/swirl velocities versus rpm and advance ratio. Superpose the slipstream on a VLM or lifting-line model, so blown strips see higher local velocity (and swirl changes local α). Add flap/jet effects with section data or jet-flap theory (Cμ-based increments and reaction lift). Include slipstream contraction and spreading, and the propulsor's own forces. Calibrate the model against RANS with actuator disks at a few points and against tunnel data; then use it for trade sweeps (span coverage, rpm schedules, flap angles) and to populate an aero database for 6-DOF simulation. State the limits: separation, jet attachment and strong interference need CFD or tests.",
+    tips: "Teams on LAT's Inter IIT problem used BEMT + XFOIL, VLM/VSM DEP studies and a Spence blown-flat-plate formula — name these.",
+  },
+  {
+    id: "qa-070",
+    category: "technical",
+    question: "LAT — What happens to the pitching moment and aerodynamic centre with powered lift, and how do you trim it?",
+    answer:
+      "Flap deflection and blowing load the aft part of the section heavily, so the centre of pressure moves aft and Cm about the quarter chord becomes strongly negative (nose-down). Because lift and moment both scale with Cμ, every throttle change is also a pitch disturbance, and the effective aerodynamic centre and neutral point shift with power setting. Trim needs a large tail download (or a canard or T-tail out of the jet wake), with trim drag; stability margins must be checked across thrust settings, and control laws need thrust–pitch decoupling or feed-forward. The CG range is constrained more tightly, and motor-out cases change both lift and moment.",
+    tips: "This is literally a bullet in LAT's Inter IIT brief.",
+  },
+  {
+    id: "qa-071",
+    category: "technical",
+    question: "LAT — Estimate the takeoff distance of an 8-seat hybrid-electric STOL aircraft from first principles.",
+    answer:
+      "Assume MTOW ≈ 3000 kg, S ≈ 30 m² and powered CLmax ≈ 5–6. Stall speed V_s = √(2W/ρSC_Lmax) ≈ 19–21 m/s; liftoff ≈ 1.15V_s ≈ 23 m/s. With T/W ≈ 0.4 and rolling friction about 0.05, the mean acceleration is roughly 0.3g ≈ 3 m/s², so the ground roll is V²/(2a) ≈ 530/6 ≈ 90 m. Add the airborne segment over a 15 m (50 ft) obstacle at a steep climb (sin γ ≈ T/W − 1/(L/D)): roughly another 60–100 m. Sanity check against the 2-acre (~90 m square) air-stop: this is why CL and T/W must be pushed hard and approaches must be steep.",
+    tips: "Say every assumption out loud and show how the answer scales: s ∝ (W/S)/(ρ C_Lmax T/W).",
+  },
+  {
+    id: "qa-072",
+    category: "technical",
+    question: "LAT — How would you control a distributed-propulsion STOL aircraft at low speed?",
+    answer:
+      "At low q, conventional surfaces are weak, but propulsors are fast and powerful effectors: differential thrust gives yaw, and differential blowing gives roll and lift. Architecture: cascaded inner rate loops, then attitude, then flight path and speed; a control-allocation layer (weighted pseudo-inverse or QP with limits) maps desired forces and moments to motors and surfaces. Schedule gains with q and thrust (powered-lift derivatives depend on Cμ). Hold speed and path with thrust on the back side of the power curve. Design for motor-out: the allocator re-distributes and protects roll authority. Validate with SIL Monte Carlo (dispersions in aero, mass, wind, sensors) and HIL on the real flight computer.",
+    tips: "A public repository holds a C 6-DOF plant 'used for 25th August flight for LAT Aerospace' — mention C/real-time plant models and SIL/HIL to show you know the workflow.",
+  },
+  {
+    id: "qa-073",
+    category: "technical",
+    question: "LAT — Describe the SIL/HIL pipeline you would set up for flight software.",
+    answer:
+      "Plant: a 6-DOF rigid-body model with the aero database (CL, CD, Cm versus α, flap and thrust), motor/propulsor dynamics, actuator dynamics and delays, sensor models (IMU noise and bias, GNSS, air data) and environment (wind, gusts, ground contact). SIL: compile the flight code against the plant on a PC, run regression suites and Monte Carlo dispersions automatically on every change. HIL: run the actual flight computer with real I/O, buses and timing against a real-time plant; inject faults (motor-out, sensor dropouts). Visualise (X-Plane/FlightGear), log everything, and correlate the plant against flight data to close the loop.",
+    tips: "LAT reportedly built its own HILS and Monte Carlo simulator — show you'd extend them, not reinvent them.",
+  },
+  {
+    id: "qa-074",
+    category: "technical",
+    question: "LAT — How would you size a hybrid powertrain with battery boost for takeoff and a turbogenerator for endurance?",
+    answer:
+      "Start from the mission power profile. Takeoff/climb: e.g. 3000 kg, T/W 0.4 at 25 m/s, η_p 0.6 → ~490 kW shaft for a minute or two. Cruise: W/(L/D) × V/η_p ≈ 231 kW at 80 m/s and L/D 12. Size the turbogenerator near cruise power (with margin and an altitude/hot-day lapse) so it runs at its efficient design point; size the battery for the peak power difference (C-rate, voltage sag, thermal) as well as the energy (e.g. 260 kW extra for 90 s ≈ 6.5 kWh) and reserve/abort cases. Then pick the bus voltage (I²R vs insulation), the motor and inverter ratings, the cooling for the losses (~10% of power), and redundancy so that a single failure leaves enough lift and thrust.",
+    tips: "The key insight: batteries for power, fuel for energy (kerosene ≈ 48× the specific energy of cells).",
+  },
+  {
+    id: "qa-075",
+    category: "technical",
+    question: "LAT — Walk me through starting a small gas turbine and what the FADEC protects.",
+    answer:
+      "Sequence: starter cranks the rotor to ~15–25% speed for airflow; igniters on; fuel metered at the start schedule; light-off detected by an EGT rise; the starter assists acceleration; it cuts out at self-sustaining speed; the FADEC then accelerates to idle on its schedule. Protections: hot start (EGT limit → cut fuel), hung start (acceleration stalls → abort), no light-off (time-out → purge), overspeed, flameout detection and relight, surge avoidance through acceleration/deceleration limits (W_f/P₃ versus N), and sensor validation with redundancy and watchdogs. In hardware: sensor signal chains, fuel valve/pump and igniter drivers, state machines, and HIL/engine-in-the-loop testing.",
+    tips: "LAT's FADEC job post lists exactly these: start/ignition logic, transient protection loops, state machines, watchdogs and redundancy, HIL/EIL.",
+  },
+  {
+    id: "qa-076",
+    category: "technical",
+    question: "LAT — How would you design the compressor for a small gas turbine (for example a 10–15 kN-class engine or a turbogenerator)?",
+    answer:
+      "At small mass flows a centrifugal stage (or axial stages plus a centrifugal stage) gives PR 4–8 per stage robustly. Steps: choose the cycle point (PR, flow, speed limit from stress/bearings); size the impeller tip speed from the required work (w ≈ σU₂², σ from Wiesner/Stanitz); pick the inducer to minimise relative Mach number at the shroud; choose the vane count (slip vs blockage) and backsweep (efficiency and stability); design the diffuser (vaneless for range, vaned for efficiency); then check the map (surge and choke margins), stresses (burst margin), rotordynamics and manufacturability (5-axis milling or casting). Validate with 1-D meanline → CFD → rig test.",
+    tips: "Bridge from your axial-compressor project: Euler work, velocity triangles and diffusion limits carry over; say honestly what's new.",
+  },
+  {
+    id: "qa-077",
+    category: "technical",
+    question: "LAT — How would you detect and intercept a small hostile drone?",
+    answer:
+      "Detect: radar is the primary sensor (FMCW, high bandwidth for range resolution; Doppler and micro-Doppler to separate rotor-driven drones from birds). Small RCS (~0.01 m²) cuts range by ~3× relative to a 1 m² target (fourth-root law), so use clutter filtering and longer integration. Track: multi-object tracking (gating, Hungarian/JPDA association, per-track Kalman filters, track management), fused with EO/IR for classification and precise bearing. Decide: threat assessment. Intercept: launch an interceptor drone guided by proportional navigation (a = N V_c λ̇), mid-course on radar tracks and terminal on its own seeker or camera; budget the latency so it doesn't become miss distance.",
+    tips: "LAT's site lists vision-based multi-object tracking on real-time hardware, sensor fusion and state estimation — lead with those.",
+  },
+  {
+    id: "qa-078",
+    category: "technical",
+    question: "LAT — How would you navigate when GNSS is jammed or spoofed?",
+    answer:
+      "Detect first: cross-check GNSS against the INS (innovation tests), watch AGC and C/N0 anomalies, and use multi-antenna angle-of-arrival checks. Then navigate with an INS aided by GNSS-independent sources: visual-inertial odometry, optical flow plus a rangefinder, terrain-relative navigation or map matching (camera, LiDAR or radar altimeter), magnetometer heading, and air data. Fuse them in an EKF or error-state filter with observability in mind, since unaided INS drift grows fast (a 0.01 m/s² accelerometer bias gives 18 m in 60 s). Plan for failure: degraded modes, uncertainty-aware guidance and safe return.",
+    tips: "This is the third step on LAT's defence roadmap (tracking → swarm coordination → GNSS-denied navigation).",
+  },
+  {
+    id: "qa-079",
+    category: "technical",
+    question: "LAT — How would you integrate a stack of electric ducted fans into a wing structurally?",
+    answer:
+      "List the loads: thrust, motor torque reaction, gyroscopic moments in manoeuvres, rotor imbalance vibration, duct pressure loads and the inertia of the mass. Route them into the spar/rib structure with dedicated frames or nacelle beams; reinforce around the cutouts that interrupt skins and spars; avoid placing structural modes near 1P and blade-pass frequencies over the rpm range (use isolators where needed); consider blade-out containment and fire/thermal paths for motors and power electronics; and keep weight in budget (span-loaded masses relieve wing bending). Verify with FEA (static + modal + fatigue), then ground vibration and static tests.",
+    tips: "The JD's structures bullet names this exact task — 'integrating powertrain, stacked electric ducted fans, and other components into a reliable airframe'.",
+  },
+  {
+    id: "qa-080",
+    category: "project",
+    question: "LAT — \"Tell me about something you built.\" (the JD wants evidence that you build things)",
+    answer:
+      "Template — use one real build: the goal and the constraint (numbers); your role (the subsystem YOU owned); two key decisions and the trade-offs; what failed or surprised you and how you found out (test data); what you changed; the final measured result versus the target; and what you'd do differently now. If your strongest builds are analysis tools (CFD setups, solvers, test rigs in the wind-tunnel internship), present them as builds: you designed, implemented, verified and used them.",
+    tips: "The JD says what you did matters more than the team's ranking. Bring a photo, plot or number you can describe from memory.",
+  },
+  {
+    id: "qa-081",
+    category: "resume",
+    question: "LAT — \"Pick a subsystem. Why that one?\"",
+    answer:
+      "Template for this profile: \"Aerodynamics — specifically blown-wing modelling. My thesis built [CFD/aerothermal estimation] skills, my wind-tunnel internship taught me [instrumentation, corrections, uncertainty], and my OpenVSP/panel-method project gave me low-fidelity tools I'd extend with slipstream models for DEP. I'd want to own the low-fidelity blown-wing model and its calibration against CFD and your tunnel. I'm also keen on GTE turbomachinery from my axial-compressor project.\" Adjust to your real strengths, then be ready to go two levels deep.",
+    tips: "\"Depth in one beats a shallow pass over all six\" — say one area clearly.",
+  },
+  {
+    id: "qa-082",
+    category: "hr",
+    question: "LAT — Why LAT?",
+    answer:
+      "Template: (1) The problem: STOL from parking-lot-sized air-stops needs CL > 5 and distributed propulsion — one of the hardest aerodynamics problems around (cite the Inter IIT brief or the demonstrator). (2) The way of working: own a subsystem from day one, real flying hardware, in-house tools and fast test loops ('the hard way…'). (3) The fit: your depth area and evidence. (4) The mission: regional connectivity in India (450+ airstrips, ~150 with commercial flights) and indigenous engines and defence tech.",
+    tips: "Avoid founder-celebrity or salary reasons. Show you read lat.com and the brief.",
+  },
+  {
+    id: "qa-083",
+    category: "behavioral",
+    question: "LAT — Tell me about working with incomplete requirements or imperfect data.",
+    answer:
+      "Template (STAR): a situation where data were missing or changing (e.g. unknown propeller data, a shifting design, noisy test results); what you assumed and why; how you got a first answer fast (bounding estimate, quick test); how you managed the uncertainty (sensitivities, error bars, telling people what would change the answer); and the outcome. End with what you now do by default — parametric, scripted analyses that rerun quickly as designs change.",
+    tips: "The JD: ambiguity 'should sound interesting, not alarming'. Show calm, method and speed.",
+  },
+  {
+    id: "qa-084",
+    category: "hr",
+    question: "LAT — What would you do in your first 90 days?",
+    answer:
+      "Weeks 1–3: learn the system and the team's tools (aero database, sims, test rigs); reproduce one existing result end to end; read flight and test logs. Weeks 3–8: take ownership of a well-scoped piece (e.g. the low-fidelity blown-wing model, or a test-stand data pipeline) and ship a first version that others use. Weeks 8–12: validate it against CFD, tunnel or flight data, automate it, document it, and propose the next improvement with data. Throughout: ask for feedback early and say what you need.",
+    tips: "Shows ownership with humility — learn, deliver something real, then improve it.",
+  },
+  {
+    id: "qa-085",
+    category: "research",
+    question: "LAT — What is known about the buddy round and final interview, and how should I prepare?",
+    answer:
+      "No public candidate reports describe LAT's 'buddy round'. Known facts: the IITB process is resume → pre-placement talk → buddy round → final interview, with no written test; last season's IITB drive went JAF (7 Oct 2025) → PPT (12 Oct) → interview shortlist (5 Nov) → extended shortlist (14 Nov). LAT's site stresses first-principles, in-house work and ownership; its Inter IIT brief shows what it values technically (math models agreeing with CFD and tunnel data, aerodynamic-centre shift, structure and controls); and its job posts show day-to-day skills (CFD workflows and aero databases; FADEC start and protection logic; embedded hardware). Likely format: a technical conversation with an engineer in your chosen programme, digging into your projects plus first-principles problems. Prepare: a 2-minute subsystem pitch, two deep project stories with numbers, estimation practice, and the GNC/structures/powertrain links of your area. Ask questions at the PPT.",
+    tips: "Treat the PPT as research: note the programmes and problems the speakers emphasise and reuse them in your answers.",
+  },
 ];
