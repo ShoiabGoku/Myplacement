@@ -10,6 +10,7 @@ import { QUANT_HFT_QUESTIONS } from "./quantHft";
 import { LAT_AEROSPACE_QUESTIONS } from "./latAero";
 import { AIRBUS_FP_QUESTIONS } from "./airbusFP";
 import { TESLA_SIE_QUESTIONS } from "./teslaSIE";
+import { GE_EEDP_QUESTIONS } from "./geEEDP";
 
 /** All built-in questions across modules. */
 export const ALL_QUESTIONS: Question[] = [
@@ -24,6 +25,7 @@ export const ALL_QUESTIONS: Question[] = [
   ...LAT_AEROSPACE_QUESTIONS,
   ...AIRBUS_FP_QUESTIONS,
   ...TESLA_SIE_QUESTIONS,
+  ...GE_EEDP_QUESTIONS,
 ];
 
 /**

@@ -385,4 +385,156 @@ export const INTERVIEW_QA: InterviewQA[] = [
       "Template — adapt to exactly what you did: process parameters (temperature, pressure, time) define a window, and defects (voids, dry spots, delamination, warpage) trace back to them; you measured outcomes (impact behaviour, mechanical tests) and compared configurations (stacking sequence) — that is a small DOE. In injection molding the same logic appears in scientific molding (viscosity curve, gate-freeze study, process window DOE) and in casting as gating/thermal control vs porosity. Be honest that high-volume tooling and PPAP are new to you, and show you know where they fit.",
     tips: "Interviewers respect honest bridges more than claimed expertise. Expect follow-ups on void formation and cure/cooling.",
   },
+  {
+    id: "qa-048",
+    category: "technical",
+    question: "GE EEDP — Explain how a high-bypass turbofan works, component by component.",
+    answer:
+      "Follow the air. The fan (LP spool) accelerates a large mass flow; most of it (the bypass stream, e.g. ~10:1 on LEAP) leaves through the fan nozzle and produces most of the thrust. The core stream passes the booster (LP compressor) and the HP compressor, which raise the pressure (overall pressure ratio ~40–60) through many stages of rotor–stator diffusion. In the combustor, fuel burns at nearly constant pressure, raising the gas to ~1700–1900 K. The HP turbine (cooled, single-crystal blades with TBCs) extracts work to drive the HP compressor; the LP turbine drives the fan and booster. The remaining energy expands in the core nozzle. Thermodynamically it is a Brayton cycle: compression, constant-pressure heat addition, expansion. Thermal efficiency comes from pressure ratio and turbine temperature; propulsive efficiency comes from moving lots of air slowly (high bypass). Close with the levers: higher OPR and TIT (materials, cooling, CMCs) and higher bypass (bigger fans, open fan in RISE).",
+    tips: "Draw it if there is a whiteboard: spools, stations, and where the temperature and pressure peak. Expect follow-ups: why two spools, why many compressor stages but few turbine stages, what limits TIT.",
+  },
+  {
+    id: "qa-049",
+    category: "technical",
+    question: "GE EEDP — What is turbine efficiency, and what is the maximum efficiency a turbine can reach? (asked of past candidates)",
+    answer:
+      "Separate three ideas. (1) Isentropic efficiency of a turbine = actual work / isentropic work for the same inlet state and exit pressure; modern HP and LP turbines reach roughly 90–93%. Losses: profile, secondary flows, tip leakage, cooling-air mixing. (2) Blade (diagram) efficiency of a stage from velocity triangles: for a single impulse stage η_max = cos²α₁, reached at U/V₁ = cos α₁/2 (e.g. 88% at α = 20°); for a 50%-reaction stage η_max = 2cos²α/(1 + cos²α) at U/V₁ = cos α (≈94% at 20°). (3) The cycle limit: no heat engine beats Carnot, 1 − T_L/T_H (≈83% between 1700 K and 288 K); a real Brayton cycle is far lower because heat is added over a temperature range and components have losses. Say which one the interviewer means before answering.",
+    tips: "Derive the impulse result quickly: η_b = 4ρ(cos α − ρ) with ρ = U/V₁; set the derivative to zero → ρ = cos α/2.",
+  },
+  {
+    id: "qa-050",
+    category: "technical",
+    question: "GE EEDP — Derive the filling time of a casting for top gating and bottom gating. (reported question)",
+    answer:
+      "Top gating: metal falls from the pouring basin through height h_t, so Bernoulli gives gate velocity V = √(2gh_t), constant during filling. Q = A_g V, so t_top = V_m/(A_g √(2gh_t)). Bottom gating: when the metal in the mould has risen to height h, the effective head is h_t − h, so V = √(2g(h_t − h)). Mass balance: A_m dh = A_g √(2g(h_t − h)) dt. Separate and integrate from 0 to h_m: t_bottom = (A_m/A_g)(1/√(2g)) · 2(√h_t − √(h_t − h_m)). Bottom gating takes longer but fills quietly, avoiding turbulence, oxide films and mould erosion; real systems add friction/choke factors and design the sprue taper so the stream does not aspirate air.",
+    tips: "State assumptions (inviscid, quasi-steady, pouring basin kept full). A panel that asks this wants to see you set up the differential equation, not recall the formula.",
+  },
+  {
+    id: "qa-051",
+    category: "technical",
+    question: "GE EEDP — What is stress concentration, and how would you reduce it in an engine part?",
+    answer:
+      "Where geometry changes abruptly — holes, fillets, slots, threads — load paths crowd together and local stress exceeds the nominal value: σ_max = K_t σ_nom (K_t = 3 for a circular hole in a wide plate under tension, at the sides perpendicular to the load). For fatigue the effective factor K_f = 1 + q(K_t − 1) depends on notch sensitivity q (high for high-strength alloys). Reduce it by larger fillet radii, relief grooves, elliptical or reinforced holes, avoiding stacked features, and better load paths; improve fatigue at the notch by surface treatments (shot peening for compressive residual stress, low-stress grinding) and by controlling surface finish. In discs, bolt holes and fir-tree slots are classic LCF hotspots designed with exactly these levers and checked with FEA plus mesh convergence.",
+    tips: "Distinguish K_t (geometry, elastic) from K_f (fatigue, material-dependent). Mention singularities: a zero-radius corner in FEA never converges.",
+  },
+  {
+    id: "qa-052",
+    category: "technical",
+    question: "GE EEDP — Explain fracture toughness, and how fatigue, fracture and creep each limit a turbine part.",
+    answer:
+      "Fracture toughness K_IC is the critical stress intensity K = Yσ√(πa) at which a crack grows unstably; it sets the critical crack size for a given stress. Fatigue: cyclic loading grows cracks (Paris law da/dN = CΔK^m); discs and shafts are limited by LCF from flight cycles (life-limited parts) and blades/vanes must avoid HCF from resonance. Creep: time-dependent strain at high homologous temperature under sustained (centrifugal) stress — the main limit for HP turbine blades, managed by single-crystal γ′ alloys, cooling, TBCs and tight temperature control (Larson–Miller: ~50 K hotter can cut life ~10×). Fracture mechanics links them: inspection intervals are set so a crack below detection size cannot grow to critical size before the next inspection (damage tolerance).",
+    tips: "Use one number to show fluency (e.g. Larson–Miller tenfold life drop). Connect to GE: discs are LLPs, blades are creep/oxidation limited.",
+  },
+  {
+    id: "qa-053",
+    category: "technical",
+    question: "GE EEDP — How would you set up an FEA of a component, and how do you know the result is right?",
+    answer:
+      "1) Define the question (peak stress for fatigue? deflection? frequencies?). 2) Simplify geometry sensibly (defeature where it does not matter, keep fillets where stress matters; use symmetry). 3) Choose elements (shells for thin walls, quadratic tets/hexes for solids) and material models (temperature-dependent properties, plasticity if needed). 4) Apply realistic loads and boundary conditions — and constrain rigid-body motion. 5) Mesh, then run a convergence study on the quantity of interest; watch for singularities at sharp corners. 6) Verify: hand calculations (beam, thin cylinder, centrifugal root stress), reaction-force balance, deformed shape sanity. 7) Validate against test data or a trusted case. 8) Report with margins and assumptions.",
+    tips: "Panels value the verification habit more than software names. Mention your meshless/numerical background as understanding discretisation error.",
+  },
+  {
+    id: "qa-054",
+    category: "technical",
+    question: "GE EEDP — Why are HP turbine blades cooled, and how is it done?",
+    answer:
+      "The gas entering the HP turbine (~1700–1900 K) is hotter than the alloy's melting/incipient-melting point (~1600 K), and creep and oxidation life fall steeply with metal temperature. So blades combine: internal convection through serpentine passages with ribs (turbulators) and pin fins at the trailing edge; impingement jets on the inside of the leading edge; film cooling — rows of (shaped) holes that lay coolant over the outside, especially showerhead rows at the leading edge where stagnation heat transfer is highest; and a thermal barrier coating (YSZ over a bond coat) that drops a few hundred kelvin. The trade-off: cooling air is bled from the compressor and does less work in the cycle, so designers minimise it — the motivation for CMCs, which need far less cooling.",
+    tips: "Use the film-cooling effectiveness definition (T_g − T_aw)/(T_g − T_c) and the leading-edge h ∝ D^−½ link to your thesis.",
+  },
+  {
+    id: "qa-055",
+    category: "technical",
+    question: "GE EEDP — How can you improve the efficiency of a Brayton (gas-turbine) cycle?",
+    answer:
+      "Ideal efficiency 1 − r_p^−(γ−1)/γ rises with pressure ratio; real efficiency also needs higher turbine inlet temperature and better components. Levers: higher overall pressure ratio (more/better compressor stages) together with higher TIT (single-crystal alloys, cooling, TBCs, CMCs); higher component efficiencies (3-D aero, tight clearances, active clearance control); less cooling and leakage flow; regeneration (useful at low pressure ratio); intercooling and reheat combined with regeneration (intercooling alone raises work but cuts efficiency). For aircraft, overall efficiency is thermal × propulsive, so higher bypass (bigger fans, geared or open fans) is the other big lever.",
+    tips: "Say why intercooling alone lowers efficiency — it is a classic follow-up.",
+  },
+  {
+    id: "qa-056",
+    category: "technical",
+    question: "GE EEDP — What is a Kalman filter? Explain it intuitively. (asked in a controls-flavoured EEDP interview)",
+    answer:
+      "It is a recursive estimator that fuses a model with noisy measurements. Predict: use the model to move the state estimate forward and grow its uncertainty (covariance) by the process noise. Update: compare with the new measurement; the Kalman gain weights the correction by relative uncertainty — trust the sensor when the model is uncertain, trust the model when the sensor is noisy — and the uncertainty shrinks. For linear systems with Gaussian noise it is the optimal (minimum-variance) estimator; the extended/unscented versions handle nonlinear models. Engine use: estimating unmeasured parameters such as component health or thrust from a few sensors, and sensor fault detection.",
+    tips: "A 1-D example helps: averaging a GPS fix with dead reckoning.",
+  },
+  {
+    id: "qa-057",
+    category: "technical",
+    question: "GE EEDP — Given an assembly drawing, how do you trace the force flow? (GE Vernova mechanical candidates were given a drawing-comprehension task)",
+    answer:
+      "Start where the load enters, then follow it member by member to the supports, writing the free-body diagram of each part. At each joint ask what is transmitted (force, moment, both) and through what (bolt shear, bolt tension, bearing/contact, weld). Example: a bracket bolted to a wall with an offset downward load — direct shear is shared by the bolts; the moment P·e pivots the bracket about its lower edge, so the heel bears in compression and bolt tension grows with distance from the heel (top bolt most loaded). Then identify the weakest link: highest stress, stress raisers, thin sections, single load paths without redundancy.",
+    tips: "Read views carefully (first- vs third-angle symbol), and say your assumptions about which joints are pinned or fixed.",
+  },
+  {
+    id: "qa-058",
+    category: "resume",
+    question: "GE EEDP — Your 2-minute thesis pitch for the GE panel.",
+    answer:
+      "Template — fill with your exact work: \"My M.Tech thesis studies [stagnation-point aerothermal heating of hypersonic vehicles]. The problem: [peak heat flux and wall temperature decide the thermal protection]. I [built/used a model — e.g. Fay–Riddell-type correlations with real-gas/Lewis-number corrections — and compared/validated against …]. The main result is [one number or trend]. What I learned that matters for engines is how stagnation-region boundary layers, wall temperature and catalycity drive heat flux — the same physics that sets leading-edge heating and cooling on turbine blades. Its limits are [assumptions].\" Then stop and let them choose where to dig.",
+    tips: "The IITK EEDP insight: most technical questions were on the thesis and its real-life application. Rehearse the follow-ups: assumptions, validation, what you would do next.",
+  },
+  {
+    id: "qa-059",
+    category: "project",
+    question: "GE EEDP — \"How does your thesis apply in real life?\" (asked of past EEDP candidates)",
+    answer:
+      "Template — keep it honest: name one concrete engine problem your skills transfer to, the quantity you would estimate, and the limit of your method. For a stagnation-heating thesis: turbine leading edges see stagnation-region heat transfer that scales like h ∝ D^−½ (the cylinder analogue of the R^−½ in Fay–Riddell); estimating that heat load guides showerhead film-cooling and TBC thickness. Your validation habit transfers to correlating models with rig data. Then the limit: engine flows are subsonic/transonic, turbulent and unsteady (wakes, free-stream turbulence), so the correlations change — you would calibrate them against test data.",
+    tips: "Say what you do NOT know; panels reward accurate boundaries more than overreach.",
+  },
+  {
+    id: "qa-060",
+    category: "hr",
+    question: "GE EEDP — Why GE Aerospace?",
+    answer:
+      "Template: (1) Purpose and product: 'invent the future of flight, lift people up and bring them home safely' — the engines on most of the world's narrowbodies (via CFM's LEAP) and the GE9X. (2) The work at JFWTC: engine technologies, advanced materials and additive manufacturing (from the JD) — name the one closest to you (e.g. hot-section heat transfer, CMCs, compressor aero). (3) Your proof: one sentence from your thesis/projects that shows you can contribute there. (4) Why EEDP: rotations plus technical training is how you want to build depth and breadth early.",
+    tips: "Avoid brand/salary answers. One specific technology fact (e.g. CMCs in the GE9X hot section) signals real research.",
+  },
+  {
+    id: "qa-061",
+    category: "hr",
+    question: "GE EEDP — What do you know about EEDP, and which rotation would you choose first?",
+    answer:
+      "EEDP (from the JD): at least 3 rotations over 2 years across areas such as New Products, Services Technology, Advanced Next-Gen Technology and Digital Technology, with technical training, mentoring by senior technologists and leadership development with programme members from other businesses and locations. Template for preference: 'My first choice is [New Products — aero-thermal/heat transfer] because [thesis link]; I'd also value a Services rotation to see how engines deteriorate in the field (EGT margin, borescope findings), which makes a better designer.' Show direction plus openness.",
+    tips: "Past candidates were also asked 'since when do you know GE' and 'would you relocate to Bangalore' — have crisp answers.",
+  },
+  {
+    id: "qa-062",
+    category: "behavioral",
+    question: "GE EEDP — Prepare one STAR story each for Humble, Transparent and Focused (the behaviours in the JD).",
+    answer:
+      "Humble (respectful, receptive, agile, eager to learn): a time you took feedback, checked it and changed your approach — e.g. a reviewer questioned your model's boundary conditions; you verified, fixed and thanked them. Transparent (shares critical information, speaks with candour): a time you surfaced bad news early — an error in results you had already shared, quantified the impact and sent corrections. Focused (quick learner, prioritises, committed): a crunch where you cut scope, sequenced tasks and delivered what mattered. Use STAR, keep each to ~90 seconds, and end with the result and what you changed. Use your real examples — these are templates.",
+    tips: "Glassdoor EEDP reports describe mostly STAR behavioural questions plus 'greatest accomplishment' and 'proudest technical project'.",
+  },
+  {
+    id: "qa-063",
+    category: "hr",
+    question: "GE EEDP — Hobbies, interests, expectations and what you will contribute (the HR round described in the IITK insight).",
+    answer:
+      "Hobbies: pick ones you can talk about for two minutes with specifics (what you did, what it taught you); link lightly to teamwork, discipline or curiosity, but don't force it. Expectations: learning through rotations, mentorship, challenging technical work, a path to technical leadership. Contribution: name two things — a skill you bring on day one (e.g. modelling and validating heat-transfer problems, CFD/numerical methods, Python) and a behaviour (owning problems end to end, communicating early). Keep salary and location questions out unless asked.",
+    tips: "The IITK candidate described the HR round as quite general — the goal is fit, energy and clarity, not trick questions.",
+  },
+  {
+    id: "qa-064",
+    category: "behavioral",
+    question: "GE EEDP — Group discussion playbook (older GE drives used GDs on cloud vs on-premise, IoT, technology and jobs).",
+    answer:
+      "Open early if you have a structure: define the topic and offer 3 lenses (e.g. cost, security, scalability; or economy, people, environment). Add facts and examples, not volume. Build on others by name ('extending Riya's point…'), disagree politely with a reason, and bring in quiet members. Keep track of time; in the last minute, summarise both sides and the group's leanings. Some formats give 1 minute to note points and 2 minutes each to speak, then a summary — practise that cadence.",
+    tips: "Evaluators score content, structure, listening and leadership. Interrupting and repeating points cost marks.",
+  },
+  {
+    id: "qa-065",
+    category: "technical",
+    question: "GE EEDP — What does the online test look like, and how should I pace it?",
+    answer:
+      "Reported patterns vary by year: CoCubes-style aptitude (quant-heavy, plus DI, reasoning and English) with a technical section of GATE-level basics; one 2019 EEDP paper had 30 quant + 10 reasoning + 10 verbal in 50 minutes, a 2016 paper had 60 aptitude + 30 technical in 90 minutes, and Bengaluru candidates mentioned a time crunch. Your JD says a 60-minute aptitude test. Pacing: one pass answering everything under ~60 s, mark the rest; do DI sets only after quick questions; never sink 3 minutes into one item; attempt everything if there is no negative marking. Revise: percentages/ratios/TSD/work, P&C and probability, DI arithmetic, syllogisms, seating, data sufficiency; plus thermodynamics, SoM, fluids, heat transfer and materials basics.",
+    tips: "Use the three GE simulations in Myplacement timed; review every wrong answer's solution before the next one.",
+  },
+  {
+    id: "qa-066",
+    category: "hr",
+    question: "GE EEDP — Good questions to ask the panel at the end.",
+    answer:
+      "Ask about the work and how to succeed: 'How are rotations matched to EEDPs, and how much say do we have?', 'What distinguishes EEDPs who go on to strong technical careers here?', 'What are the hardest technical problems the JFWTC teams in [area] are working on right now?', 'How does FLIGHT DECK show up in an engineer's day-to-day work?' Avoid questions answered in the JD or pre-placement talk (bond, salary structure) and anything that signals leaving.",
+    tips: "One or two thoughtful questions are enough; tie one to something the panel said.",
+  },
 ];
