@@ -1629,6 +1629,38 @@ export const TESTS: TestDef[] = [
     topics: ["Quantitative Aptitude"],
     companies: ["Goldman Sachs", "JPMorgan", "Amazon", "TCS"],
   },
+  // ---------- Cards (playing-card aptitude) ----------
+  {
+    id: "card-probability",
+    module: "aptitude",
+    title: "Cards I: Probability with a 52-Card Deck",
+    description: "Single and two-card draws with and without replacement, red-or-king style unions, complements, 'at least one ace', different suits, ordered draws, conditional probability (including the 'at least one ace' trap), the lost-card Bayes problem, expected aces, the expected position of the first ace, a card game's expected value and independence vs mutual exclusivity.",
+    difficulty: "mixed",
+    durationMin: 25,
+    questionIds: [
+      "card-001", "card-002", "card-003", "card-004", "card-005", "card-006", "card-007",
+      "card-008", "card-009", "card-020", "card-021", "card-022", "card-023", "card-024",
+      "card-025", "card-026", "card-027",
+    ],
+    topics: ["Quantitative Aptitude"],
+    companies: ["Goldman Sachs","JPMorgan","TCS","GE Aerospace"],
+  },
+  {
+    id: "card-counting-puzzles",
+    module: "aptitude",
+    title: "Cards II: Counting Hands, Card Puzzles & Hard Mix",
+    description: "Counting 5-card hands (two aces, flushes, full houses, four of a kind, one pair), one card per suit, ordered draws and colour splits; the Wason selection task, a card-arrangement puzzle, pigeonhole 'how many to be sure' draws and a missing-card sum; plus CAT-level problems: at least one ace in five cards, first ace on the 3rd card, all four aces in a bridge hand.",
+    difficulty: "mixed",
+    durationMin: 30,
+    questionIds: [
+      "card-010", "card-011", "card-012", "card-013", "card-014", "card-015", "card-016",
+      "card-017", "card-018", "card-019", "card-028", "card-029", "card-030", "card-031",
+      "card-032", "card-033", "card-034", "card-035", "card-036", "card-037",
+    ],
+    topics: ["Quantitative Aptitude","Logical Reasoning"],
+    companies: ["Goldman Sachs","JPMorgan","TCS","GE Aerospace"],
+  },
+  // ---------- end Cards ----------
   {
     id: "apt-area-drill",
     module: "aptitude",

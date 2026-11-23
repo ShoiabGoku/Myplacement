@@ -12,6 +12,7 @@ import { AIRBUS_FP_QUESTIONS } from "./airbusFP";
 import { TESLA_SIE_QUESTIONS } from "./teslaSIE";
 import { GE_EEDP_QUESTIONS } from "./geEEDP";
 import { LAT_CORE_QUESTIONS } from "./latCore";
+import { CARD_QUESTIONS } from "./cards";
 
 /** All built-in questions across modules. */
 export const ALL_QUESTIONS: Question[] = [
@@ -28,6 +29,7 @@ export const ALL_QUESTIONS: Question[] = [
   ...TESLA_SIE_QUESTIONS,
   ...GE_EEDP_QUESTIONS,
   ...LAT_CORE_QUESTIONS,
+  ...CARD_QUESTIONS,
 ];
 
 /**
