@@ -1321,6 +1321,41 @@ export const TESTS: TestDef[] = [
     topics: ["LAT Fit & Company Knowledge","Your Projects → LAT"],
     companies: ["LAT Aerospace"],
   },
+  // ---------- Vantage Research (Scientist, Modeler) ----------
+  {
+    id: "vr-must-know-1",
+    module: "aerospace",
+    title: "Vantage Must-Know 1: ODE Modelling, Numerics & PK/PD",
+    description: "The highest-priority items for the Vantage MSQ test and the ODE interview round: tank and vessel ODEs (Torricelli draining, conical tanks, linear outflow time constant, tanks in series), mixing and cooling, first-order and logistic behaviour, eigenvalue stability, Michaelis–Menten limits; Euler stability and hand steps, stiffness and solver choice (ode45 vs ode15s), adaptive tolerances, diffusion stability, trapezoidal AUC; one-compartment PK, half-life, AUC, bioavailability, infusion steady state, volume of distribution, tmax, Emax and nonlinear PK. Many items are multiple-select.",
+    difficulty: "mixed",
+    durationMin: 40,
+    questionIds: [
+      "vr-001", "vr-002", "vr-003", "vr-004", "vr-005", "vr-006", "vr-007",
+      "vr-011", "vr-013", "vr-014", "vr-016", "vr-017", "vr-018", "vr-020",
+      "vr-021", "vr-023", "vr-024", "vr-028", "vr-029", "vr-030", "vr-031",
+      "vr-032", "vr-035", "vr-036", "vr-037", "vr-038", "vr-041",
+    ],
+    topics: ["ODE Modelling & Dynamical Systems","Numerical Methods for ODEs & PDEs","PK/PD Modelling"],
+    companies: ["Vantage Research"],
+  },
+  {
+    id: "vr-must-know-2",
+    module: "aerospace",
+    title: "Vantage Must-Know 2: Estimation, Sensitivity, Statistics, Coding & Interpretation",
+    description: "The rest of the JD's must-knows: QSP vs empirical models, virtual populations, K_D and QSSA; weighted least squares, global optimisation, AIC, log-parameterisation, MLE and residual diagnostics; normalised local sensitivity, local vs global SA, Sobol indices, structural vs practical identifiability; lognormal variability, Bayes, Gillespie SSA, Monte Carlo error and p-values; solve_ivp, ode45 syntax, list vs array, a correct Euler loop and least_squares; reading semi-log plots, what-if on dose and clearance, debugging impossible results and the time-step question. Many items are multiple-select.",
+    difficulty: "mixed",
+    durationMin: 45,
+    questionIds: [
+      "vr-045", "vr-046", "vr-048", "vr-050", "vr-055", "vr-057", "vr-058",
+      "vr-059", "vr-060", "vr-065", "vr-067", "vr-068", "vr-069", "vr-072",
+      "vr-073", "vr-077", "vr-081", "vr-083", "vr-084", "vr-086", "vr-089",
+      "vr-090", "vr-092", "vr-097", "vr-098", "vr-101", "vr-102", "vr-103",
+      "vr-104", "vr-106", "vr-108",
+    ],
+    topics: ["Parameter Estimation & Optimisation","Sensitivity Analysis & Identifiability","Probability, Statistics & Stochastic Simulation","Scientific Coding (Python/MATLAB/R)","Research Aptitude & Interpretation"],
+    companies: ["Vantage Research"],
+  },
+  // ---------- end Vantage Research ----------
   // ---------- Coding ----------
   {
     id: "cod-dsa-fundamentals",

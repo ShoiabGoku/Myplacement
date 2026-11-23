@@ -689,4 +689,84 @@ export const INTERVIEW_QA: InterviewQA[] = [
       "No public candidate reports describe LAT's 'buddy round'. Known facts: the IITB process is resume → pre-placement talk → buddy round → final interview, with no written test; last season's IITB drive went JAF (7 Oct 2025) → PPT (12 Oct) → interview shortlist (5 Nov) → extended shortlist (14 Nov). LAT's site stresses first-principles, in-house work and ownership; its Inter IIT brief shows what it values technically (math models agreeing with CFD and tunnel data, aerodynamic-centre shift, structure and controls); and its job posts show day-to-day skills (CFD workflows and aero databases; FADEC start and protection logic; embedded hardware). Likely format: a technical conversation with an engineer in your chosen programme, digging into your projects plus first-principles problems. Prepare: a 2-minute subsystem pitch, two deep project stories with numbers, estimation practice, and the GNC/structures/powertrain links of your area. Ask questions at the PPT.",
     tips: "Treat the PPT as research: note the programmes and problems the speakers emphasise and reuse them in your answers.",
   },
+  {
+    id: "qa-086",
+    category: "technical",
+    question: "Vantage — Formulate and solve the ODE for a vessel with inflow and outflow (the reported round-1 task).",
+    answer:
+      "1) Volume balance: dV/dt = Q_in − Q_out. 2) Geometry: V(h) for the vessel, so dV/dt = A(h) dh/dt, where A(h) is the free-surface area at depth h (cylinder A = const; cone apex down A = π(Rh/H)²; sphere A = π(2rh − h²)). 3) Outflow law: orifice (Torricelli) Q_out = C_d·a·√(2gh), or linear Q_out = kh for a resistance. 4) ODE: dh/dt = (Q_in − Q_out(h))/A(h), with h(0) = h₀. 5) Solve: separate variables when Q_in = 0 (cylinder: √h = √h₀ − (a/2A)√(2g) t, draining time (A/a)√(2h₀/g)); linear outflow gives h = (Q_in/k)(1 − e^(−kt/A)) + h₀e^(−kt/A); otherwise integrate numerically (ode45/solve_ivp). 6) Steady state: Q_in = Q_out(h*) (orifice: h* = (Q_in/(C_d a))²/(2g)). 7) Sketch h(t): monotone approach to h* (first-order, no overshoot); state units and sanity-check limits.",
+    tips: "Narrate assumptions (well-mixed, incompressible, constant C_d). Expect a follow-up on plotting and on what changes for a cone or sphere.",
+  },
+  {
+    id: "qa-087",
+    category: "technical",
+    question: "Vantage — Derive how long an inverted conical tank takes to drain through a bottom orifice.",
+    answer:
+      "Cone of top radius R at height H, apex down: A(h) = π(R/H)² h². Torricelli: A(h) dh/dt = −a√(2gh) → π(R/H)² h^(3/2) dh = −a√(2g) dt. Integrate from h₀ to 0: π(R/H)² (2/5) h₀^(5/2) = a√(2g) T → T = (2π R² h₀^(5/2)) / (5 H² a √(2g)). Compare with a cylinder (T ∝ h₀^(1/2)): the cone drains faster at the end because the surface area shrinks as h falls. Check the dimensions: (m² · m^(5/2))/(m² · m² · m^(1/2) s⁻¹) = s ✓.",
+    tips: "Always do a dimensional check — it catches most algebra slips under pressure.",
+  },
+  {
+    id: "qa-088",
+    category: "technical",
+    question: "Vantage — Explain the one-compartment PK model and its key parameters.",
+    answer:
+      "Body = one well-mixed compartment of apparent volume V; elimination first-order with clearance CL. dA/dt = −(CL/V)A (+ input). IV bolus: C(t) = (Dose/V)e^(−kt), k = CL/V, t½ = 0.693V/CL, AUC = Dose/CL. Infusion: Css = R₀/CL, reached in ~4–5 half-lives. Oral: first-order absorption ka and bioavailability F; t_max = ln(ka/k)/(ka − k). Key intuition: CL controls exposure (AUC, Css), V controls the initial concentration and, with CL, the half-life. Limits: biphasic decline needs two compartments; saturable elimination needs Michaelis–Menten; antibodies often show TMDD.",
+    tips: "Draw the semi-log plot: a straight line means one compartment.",
+  },
+  {
+    id: "qa-089",
+    category: "technical",
+    question: "Vantage — How do you estimate parameters of an ODE model from data?",
+    answer:
+      "1) Check structural identifiability (which parameters/combinations the data can determine). 2) Choose the error model (additive, proportional, combined) → objective: weighted least squares or likelihood. 3) Reparameterise (log for positive rates), set bounds from literature. 4) Optimise: global exploration (multi-start from Latin hypercube, GA, PSO, scatter search) then local refinement (Levenberg–Marquardt, trust-region), with an appropriate solver (stiff → ode15s/BDF) and sensible tolerances. 5) Diagnose: residuals (trends, fanning), goodness of fit, parameter uncertainty (profile likelihood, FIM), correlations. 6) Validate on data not used for fitting. 7) Report uncertainty and what the model can and cannot predict.",
+    tips: "Mention identifiability first and validation last — interviewers listen for both.",
+  },
+  {
+    id: "qa-090",
+    category: "technical",
+    question: "Vantage — Local vs global sensitivity analysis: what are they and when do you use each?",
+    answer:
+      "Local SA: derivatives of outputs with respect to parameters at a nominal point, usually normalised S = (∂y/∂p)(p/y). Cheap (one perturbation per parameter, or forward sensitivity equations), good for gradients and quick insight, but valid only near that point and blind to interactions. Global SA: sample the whole plausible parameter space. Morris screening (μ*, σ) ranks importance cheaply; LHS–PRCC handles monotonic relations; variance-based Sobol indices (first-order Sᵢ, total S_Tᵢ) capture nonlinearity and interactions at higher cost. In QSP, use global SA to find the parameters driving key outputs, prioritise data and experiments, decide what to fix vs estimate, and to answer client 'what-if' questions robustly.",
+    tips: "Know one formula from each: S_local and the definitions of Sᵢ and S_Tᵢ.",
+  },
+  {
+    id: "qa-091",
+    category: "technical",
+    question: "Vantage — What is identifiability, and how do you check it?",
+    answer:
+      "Structural identifiability: with perfect, noise-free data of the observed outputs, can parameters be determined uniquely? (Check by Taylor series, differential algebra, or tools like DAISY/StructuralIdentifiability.jl.) Example: y = a·b·t — only the product is identifiable. Practical identifiability: with the real, noisy, sparse data, are parameters precisely determined? Check with profile likelihood (flat profiles mean unidentifiable), FIM eigenvalues, parameter correlations and bootstrap. Remedies: reparameterise, fix parameters from literature, add measurements or design better experiments.",
+    tips: "A model can be structurally identifiable but practically unidentifiable — say so explicitly.",
+  },
+  {
+    id: "qa-092",
+    category: "technical",
+    question: "Vantage — What is stiffness, and how do you handle it in simulations?",
+    answer:
+      "A system is stiff when it has widely separated time scales (fast binding, slow disease progression): explicit solvers must take tiny steps for stability even after the fast transients die out (Euler needs h < 2/|λ_max|). Handle it with implicit/BDF solvers (ode15s, ode23s; SciPy BDF, Radau, LSODA; CVODE), by providing Jacobians, setting appropriate absolute tolerances for tiny states, or by model reduction (QSSA for fast equilibria, rapid-equilibrium assumptions). Signs: ode45 crawling, a huge number of steps, oscillating or blowing-up solutions.",
+    tips: "Link to your own experience: a CFD or thesis simulation where step size or solver choice mattered.",
+  },
+  {
+    id: "qa-093",
+    category: "project",
+    question: "Vantage — Walk us through your thesis simulation. How did the time step (or mesh) affect the results?",
+    answer:
+      "Template — use your real project: the physical problem and governing equations; the numerical method (explicit/implicit, order); how you chose the time step or mesh (stability limit such as CFL, accuracy target); the convergence study you ran (results changing by less than X% when the step was halved); validation against data or analytical cases; what you'd change. If you didn't run a formal convergence study, say how you would, honestly.",
+    tips: "A Glassdoor report says round 2 probed an MS thesis and how changing the time step matters — prepare numbers.",
+  },
+  {
+    id: "qa-094",
+    category: "hr",
+    question: "Vantage — Why QSP, and why Vantage, coming from aerospace engineering?",
+    answer:
+      "Template: 'Modelling dynamical systems with ODEs/PDEs, solving them numerically, fitting them to data and asking what-if questions is what I do in aerospace [give one example]. QSP applies the same toolkit to physiology, where a model can directly change a drug-development decision — that impact appeals to me. Vantage builds mechanistic physiology models customised to each client question across oncology, autoimmune and metabolism, and works directly with pharma teams, so I'd learn fast and own real problems. I've started learning the biology through [paper/course], and I'm comfortable learning a new domain from the literature.'",
+    tips: "The JD explicitly lists mechanical, chemical and aerospace engineers — say that you noticed it.",
+  },
+  {
+    id: "qa-095",
+    category: "research",
+    question: "Vantage — A client asks which of two doses to take into Phase 2. How would you approach it with a model?",
+    answer:
+      "Clarify the decision and criteria (efficacy endpoint, safety margin, target engagement), the data available (PK, biomarkers, preclinical efficacy) and the timeline. Build fit-for-purpose: PK model (population, with variability) → target engagement (receptor occupancy/TMDD) → PD/disease model linked to the clinical endpoint, keeping mechanism where extrapolation is needed. Calibrate and validate; run a global sensitivity analysis to find drivers and uncertainties; simulate both doses across a virtual population; report the probability of reaching the target effect and the safety exposure margins with uncertainty; and recommend data that would reduce the key uncertainties.",
+    tips: "This is the 'break a complex problem into a research flow' competency from the JD.",
+  },
 ];
