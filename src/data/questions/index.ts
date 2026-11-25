@@ -14,6 +14,7 @@ import { GE_EEDP_QUESTIONS } from "./geEEDP";
 import { LAT_CORE_QUESTIONS } from "./latCore";
 import { CARD_QUESTIONS } from "./cards";
 import { VANTAGE_QUESTIONS } from "./vantage";
+import { KALAM_LABS_QUESTIONS } from "./kalamLabs";
 
 /** All built-in questions across modules. */
 export const ALL_QUESTIONS: Question[] = [
@@ -32,6 +33,7 @@ export const ALL_QUESTIONS: Question[] = [
   ...LAT_CORE_QUESTIONS,
   ...CARD_QUESTIONS,
   ...VANTAGE_QUESTIONS,
+  ...KALAM_LABS_QUESTIONS,
 ];
 
 /**

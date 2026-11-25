@@ -769,4 +769,116 @@ export const INTERVIEW_QA: InterviewQA[] = [
       "Clarify the decision and criteria (efficacy endpoint, safety margin, target engagement), the data available (PK, biomarkers, preclinical efficacy) and the timeline. Build fit-for-purpose: PK model (population, with variability) → target engagement (receptor occupancy/TMDD) → PD/disease model linked to the clinical endpoint, keeping mechanism where extrapolation is needed. Calibrate and validate; run a global sensitivity analysis to find drivers and uncertainties; simulate both doses across a virtual population; report the probability of reaching the target effect and the safety exposure margins with uncertainty; and recommend data that would reduce the key uncertainties.",
     tips: "This is the 'break a complex problem into a research flow' competency from the JD.",
   },
+  {
+    id: "qa-096",
+    category: "technical",
+    question: "Kalam Labs — Walk me through a first-cut sizing of an electric ISR UAV for 50,000 ft.",
+    answer:
+      "1) Requirements: payload mass and power (EO/IR gimbal ~3 kg), loiter altitude and endurance, launch method (runway, hand, balloon), recovery, link range. 2) Atmosphere at 15.2 km: ρ ≈ 0.187 kg/m³ (σ ≈ 0.15), T ≈ −56.5 °C ISA (−70 °C on cold days), a ≈ 286–295 m/s, μ ≈ 1.42 × 10⁻⁵ → chord Re ≈ 10⁵. 3) Constraint analysis: stall at altitude caps wing loading, W/S ≤ ½ρV_s²C_Lmax; with a low-Re C_Lmax ≈ 1.2 and a TAS stall of ~30 m/s that is ~100 N/m² → for 12 kg, S ≈ 1.1–1.2 m². Climb, ceiling and loiter set the power loading. 4) Choose AR 12–20 (span ~3.5–4.5 m), estimate C_D0 from wetted area, e ≈ 0.8–0.9. 5) Power: loiter near minimum power, P = DV/(η_motor η_prop) — remember P ∝ 1/√σ. 6) Energy: E = P t / usable fraction, derated for cold; battery mass = E/(Wh/kg) → iterate the mass budget (battery ~25–35%, structure ~30%). 7) Propeller: diameter for low disk loading, tip Mach < ~0.7 in cold air, variable pitch to cover climb and cruise J. 8) Stability: tail volume ~0.4–0.6, static margin ~10–15%, check modes in AVL. 9) Then XFLR5/AVL → CFD on the critical cases → build → low-altitude flights → step up in altitude, correcting the model with flight logs.",
+    tips: "Write numbers as you go and sanity-check units. Interviewers care more about the order of steps and the assumptions than the exact values.",
+  },
+  {
+    id: "qa-097",
+    category: "technical",
+    question: "Kalam Labs — How do stall speed, power required, wing size and Reynolds number change from sea level to 50,000 ft?",
+    answer:
+      "At σ ≈ 0.152: (1) Stall: the EAS is unchanged, so V_TAS = V_EAS/√σ ≈ 2.6 × the sea-level value. (2) Power at the same weight and C_L: drag is the same but V is 2.6 × higher, so P ∝ 1/√σ ≈ 2.6 ×. (3) Wing area to keep the same TAS and C_L: S ∝ 1/σ ≈ 6.6 × — so in practice you fly faster and enlarge the wing. (4) Reynolds number: ρ falls 6.6 × but μ only ~20% (it depends on temperature), so Re falls ~5 × at the same TAS and chord → Re ≈ 10⁵, low-Re airfoil problems. (5) At constant EAS, q is unchanged but aerodynamic damping ∝ ρV ∝ √σ, so modes are less damped. (6) Speed of sound falls (cold), so the propeller tip and any high-speed dive reach higher Mach numbers.",
+    tips: "Know σ ≈ 0.15 and √σ ≈ 0.39 at 50,000 ft by heart — most of these answers follow from them.",
+  },
+  {
+    id: "qa-098",
+    category: "technical",
+    question: "Kalam Labs — What happens to airfoils at Re ≈ 10⁵, and how do you design for it?",
+    answer:
+      "The laminar boundary layer separates in the adverse pressure gradient, transitions in the shear layer and may reattach, forming a laminar separation bubble. Effects: higher drag (pressure drag of the bubble), lower C_Lmax, kinks and hysteresis in the lift curve, abrupt stall if the bubble bursts, and strong sensitivity to roughness, free-stream turbulence and vibration. Design responses: thin (8–10%), moderately cambered low-Re sections with gentle pressure recovery (SD7037, E387, AG/HQ families; FX 63-137 for high C_L); analyse in XFOIL at the actual Re with a realistic Ncrit; use trip strips or turbulators just ahead of laminar separation when the bubble drag is large; keep the surface finish consistent with the transition assumption; validate with tunnel or flight data, because RANS and XFOIL both struggle near stall.",
+    tips: "Draw a pressure distribution with the bubble's characteristic plateau — it shows you really understand it.",
+  },
+  {
+    id: "qa-099",
+    category: "technical",
+    question: "Kalam Labs — Why do you need variable-pitch propellers for a climb to 50,000 ft?",
+    answer:
+      "A fixed-pitch propeller is efficient near one advance ratio J = V/(nD). During the climb into thin air the true airspeed for the same EAS rises about 2.6 times by 50,000 ft, while motor rpm is limited, so J rises a lot: blades set fine for the low-speed, high-thrust climb end up unloaded and inefficient at altitude, while blades set coarse would stall and overload the motor at low speed. Variable pitch keeps each blade section near its best angle of attack and keeps the motor near its efficient rpm–torque point across the whole profile. Other thin-air choices: larger diameter (lower disk loading, since ideal power ∝ T^1.5/√(ρA)), tip Mach below ~0.7 in −70 °C air (a ≈ 286 m/s), blade airfoils chosen for low Re. Costs: hub mass, complexity, a reliability risk and an actuator to control; the alternative is a fixed pitch optimised for the most important phase and accepting losses elsewhere.",
+    tips: "Link the answer to the JD sentence about fixed-pitch propellers being efficient at one speed only.",
+  },
+  {
+    id: "qa-100",
+    category: "technical",
+    question: "Kalam Labs — How do you keep batteries and electronics working at −70 °C?",
+    answer:
+      "Batteries: Li-ion internal resistance rises several-fold in the cold, so voltage sags and usable capacity and power fall; charging below 0 °C risks lithium plating. Measures: insulate the bay, pre-heat before launch, heater pads under BMS control, place packs near ESC/avionics waste heat, choose cells rated for low-temperature discharge, derate the low-voltage cut-off logic, and let the discharge I²R heat help once current flows. Electronics: use parts rated to −40 °C (industrial) or −55 °C (military), avoid brittle plastics, watch solder-joint fatigue from thermal cycling and condensation or icing on descent (conformal coating, venting). Thin air also cuts convective cooling, so high-power parts (ESC, motor, radios) can overheat even when the air is cold — provide conduction paths. Test everything in a thermal–altitude chamber before flight.",
+    tips: "Mention both problems — too cold and too little cooling — on the same flight.",
+  },
+  {
+    id: "qa-101",
+    category: "technical",
+    question: "Kalam Labs — How would you set up and validate a CFD study of a low-Re wing?",
+    answer:
+      "Geometry and domain: clean CAD, far field 20–30 chords (2D) or 10+ spans (3D), symmetry plane where valid. Mesh: structured C/O-grid or prism layers, first-cell height for y⁺ ≈ 1 (≈ 40 µm at 40 m/s and 50,000 ft for a 0.3 m chord), growth ratio 1.1–1.2, 20+ layers across the boundary layer, fine streamwise spacing where the bubble sits. Physics: a transition model (γ–Re_θ or γ-SST), since fully turbulent SA/SST miss the bubble; set the inlet turbulence intensity to match tunnel or flight; compressibility off at low Mach; transient runs near stall. Convergence: residuals down several orders and forces flat. Verification: three systematically refined grids, observed order and Richardson extrapolation (GCI), a domain-size check. Validation: compare C_L–α, drag polar and C_p with XFOIL and tunnel data at the same Re and turbulence level, then report the uncertainty and the conditions where the results should not be trusted (bubble bursting, post-stall).",
+    tips: "The JD asks for 'the limits of the results' — end your answer with them.",
+  },
+  {
+    id: "qa-102",
+    category: "technical",
+    question: "Kalam Labs — How do you correlate XFLR5/AVL, CFD, wind-tunnel and flight data, and use flight logs for the next iteration?",
+    answer:
+      "Use a fidelity ladder: XFOIL/XFLR5/AVL for fast trade studies and stability derivatives; CFD for drag build-up, interference and critical cases; wind tunnel (with blockage and wall corrections, matching Re and turbulence) for polars and control effectiveness; flight for the truth. From flight logs: power-off glides give drag directly (D = W sin γ); steady level points give D from shaft power × propeller efficiency; reciprocal headings remove wind; trim elevator vs C_L at two CG positions gives the stick-fixed neutral point; system-identification manoeuvres (doublets, 3-2-1-1) give damping and control derivatives. Compare with predictions, explain the gaps (Re and transition, excrescences like antennas and gimbals, propeller slipstream, aeroelastic twist, airspeed calibration), update the model's corrections, and feed them into the next airframe.",
+    tips: "Have one concrete example of a prediction that did not match reality and what you learned.",
+  },
+  {
+    id: "qa-103",
+    category: "technical",
+    question: "Kalam Labs — How do you choose and verify the static margin?",
+    answer:
+      "Find the neutral point from AVL or XFLR5 (or the tail-volume method), then place the CG for a static margin of roughly 5–15% MAC for an autopilot-flown UAV: too small and gusts and payload shifts can destabilise it; too large and trim drag and elevator demand grow. Account for every CG change: battery placement, payload release (dropping a 2.5 kg payload 0.26 m ahead of the CG on a 12 kg aircraft moves the CG 68 mm aft — about 22% MAC) and fuel if any. Verify in flight: trim at several speeds at two or more CG positions; plot elevator to trim against C_L; the slope goes to zero at the stick-fixed neutral point, so extrapolate. Check the autopilot's pitch-loop behaviour at the extremes of the CG range.",
+    tips: "Saying 'I would check the margin after payload release' shows design-for-operations thinking.",
+  },
+  {
+    id: "qa-104",
+    category: "technical",
+    question: "Kalam Labs — Why does an autopilot tuned at low altitude misbehave at 50,000 ft?",
+    answer:
+      "At the same EAS the dynamic pressure is the same, but aerodynamic damping scales with ρV ∝ √σ, so short-period and Dutch-roll damping fall to about 0.4 of their low-altitude values; gains tuned for dense air can then produce oscillations. The true airspeed is 2.6 times higher, so the kinematic loops (heading, track, altitude rate) see different gains; control power at low q is limited and actuators saturate earlier; low-q air data is noisier; and cold can slow servos. Remedies: schedule gains with EAS or dynamic pressure and altitude, design controllers on an altitude-dependent model, add rate damping (q, p, r loops), tune in simulation and confirm with system-identification flights at increasing altitude.",
+    tips: "This is the JD's point about standard autopilots being tuned for dense air — say that you noticed it.",
+  },
+  {
+    id: "qa-105",
+    category: "technical",
+    question: "Kalam Labs — A UAV is released from a balloon at 30 km. What must the design handle?",
+    answer:
+      "Hours of cold soak during the ascent (heat the battery and avionics); release without tumbling (nose-down release attitude, drogue or stabilising fins); a long dive to build dynamic pressure, because σ ≈ 0.015 at 30 km puts the stall TAS at about 8 times its sea-level value; high true airspeed at low q, so Mach number, flutter and control-reversal margins must be checked (800 km/h TAS at 20 km is only ~60 m/s EAS but Mach 0.75); a pull-out within the structural load-factor limit and with enough elevator authority at low q; then transition to glide or powered loiter, navigation above COCOM limits, and finally recovery (for the reported ISR UAV: parachute and net).",
+    tips: "Structure the answer by mission phase: ascent → release → dive → pull-out → loiter → recovery.",
+  },
+  {
+    id: "qa-106",
+    category: "technical",
+    question: "Kalam Labs — Why do many GPS receivers stop at 18 km, and how do you navigate at 30 km?",
+    answer:
+      "Export-control (COCOM) rules make commercial receivers stop giving fixes above about 18 km and/or 515 m/s, to prevent use in missiles; the GPS signals themselves are fine at 30 km. Solutions: receivers without the limit (licensed or defence variants), multi-constellation GNSS including NavIC for an Indian regional source, and an INS fused with GNSS in an extended Kalman filter, so that outages and jamming are bridged — but INS error grows (a 1 mg accelerometer bias gives ~70 m in 2 minutes), so add aiding from air data, magnetometer and, where possible, vision; add spoofing checks (consistency between GNSS, INS and air data).",
+    tips: "Mention NavIC — it is in the JD.",
+  },
+  {
+    id: "qa-107",
+    category: "project",
+    question: "Kalam Labs — Walk us through an aircraft you designed, built and flew.",
+    answer:
+      "Template — use your real project and numbers: the mission and scoring (what the competition rewarded); sizing (weight estimate, wing loading, power loading, why that airfoil at that Reynolds number, aspect ratio); stability (CG, static margin, tail volume, how you checked it in XFLR5/AVL); structure and manufacture (materials, spar sizing, joints); testing (first flight, failures, crashes and their root causes); data (logs, measured vs predicted speed or endurance); what you changed and what you would change now. If you did not win, say what you learned and show depth instead of rank.",
+    tips: "Kalam Labs prefers competition winners but cares most about hands-on depth — be ready for follow-up questions on every number you mention.",
+  },
+  {
+    id: "qa-108",
+    category: "hr",
+    question: "Kalam Labs — Why Kalam Labs, and why defence aviation?",
+    answer:
+      "Template: 'I want to design aircraft that actually fly and matter. At Kalam Labs I would take my own designs from CAD and CFD through the composites shop to flight trials at high-altitude sites — few places in India let a new engineer do that. The thin-air problem (low Re, cold, variable-pitch propulsion, autopilots for low damping) is exactly where my [aero/CFD/competition experience] applies, and I have thought about the defence role: [your honest view]. I am comfortable with Lucknow and with field trials in the mountains.'",
+    tips: "Personalise it with one specific reason and one fact about their work (for example the June 2025 flight to 9,790 m).",
+  },
+  {
+    id: "qa-109",
+    category: "research",
+    question: "Kalam Labs — Flight logs show 15% more drag than predicted. How do you find out why?",
+    answer:
+      "First check the measurement chain: airspeed calibration (position error, low-q sensor offset), density used for EAS→TAS, the propeller efficiency assumed in converting power to drag (a power-off glide test removes it), weight, and wind (reciprocal headings). Then check the prediction: Reynolds number and transition assumptions (a lost laminar run or a bigger bubble at the real Re or turbulence), excrescences (antennas, gimbal, hinge gaps, rough joints), interference (fuselage–wing, propeller slipstream on a pusher), trim drag from the CG position and aeroelastic twist under load. Isolate with targeted tests (glides, tufts, tape-over gaps, flights with and without the gimbal), fix the biggest contributors and update the drag build-up for the next design.",
+    tips: "Interviewers want a systematic split between 'the measurement is wrong' and 'the model is wrong'.",
+  },
 ];
